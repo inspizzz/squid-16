@@ -1,21 +1,29 @@
 Qty,References,Value,Description,Footprint,Manufacturer,MPN,Side,Fitted
 16,C1 C2 C3 C4 C5 C6 C7 C8 C9 C10 C11 C12 C13 C14 C15 C16,220p,Capacitor 220 pF C0G 0402,C_0402_1005Metric,,,top,yes
-7,C17 C18 C20 C21 C24 C25 C30,1u,Capacitor 1 uF X5R 10 V 0402,C_0402_1005Metric,,,top,yes
+10,C17 C18 C20 C21 C24 C25 C30 C33 C36 C37,1u,Capacitor 1 uF X5R 10 V 0402,C_0402_1005Metric,,,top,yes
 1,C19,2.2u,Capacitor 2.2 uF X5R 6.3 V 0402,C_0402_1005Metric,,,top,yes
 2,C22 C26,220n,Capacitor 220n 0402,C_0402_1005Metric,,,top,yes
-4,C23 C27 C28 C29,100n,Capacitor 100n 0402,C_0402_1005Metric,,,top,yes
+5,C23 C27 C28 C29 C35,100n,Capacitor 100n 0402,C_0402_1005Metric,,,top,yes
 1,C31,10n,Capacitor 10 nF C0G 0402,C_0402_1005Metric,,,top,yes
+1,C34,10u,Capacitor 10 uF X5R 6.3 V 0603,C_0603_1608Metric,,,top,yes
+1,D1,green,Status LED 0402,LED_0402_1005Metric,,generic 0402 green LED,top,yes
 1,FB1,600R@100MHz,Ferrite bead 600 ohm 0402,L_0402_1005Metric,Murata,BLM15AG601SN1D,top,yes
-2,J1 J2,Socket 1x7,"1x7 SMD socket 2.54 mm, single row, vertical, legs alternating left/right. Listed part is obsolete: any socket matching the footprint will do, check the pad pattern",PinSocket_1x07_P2.54mm_Vertical_SMD_Pin1Left,Harwin,M20-7860746,top,yes
+1,J1,USB-C,"USB-C receptacle, USB 2.0, 16 pin, surface mount, top mount",USB_C_Receptacle_GCT_USB4110,GCT,USB4110-GF-A,top,yes
 18,P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18,Pogo pin,"SMD spring-loaded pin, 3.96 mm tip (dry electrode)",PogoPin_MillMax_0845_SMD,Mill-Max,0845-0-15-20-52-14-11-0,bottom,yes
 16,R1 R2 R3 R4 R5 R6 R7 R8 R9 R10 R11 R12 R13 R14 R15 R16,4k7,Resistor 4k7 1% 0402,R_0402_1005Metric,,,top,yes
-2,R17 R21,10k,Resistor 10k 1% 0402,R_0402_1005Metric,,,top,yes
+6,R17 R21 R29 R36 R37 R38,10k,Resistor 10k 1% 0402,R_0402_1005Metric,,,top,yes
 1,R18,100R,Resistor 100R 0402. Fitted: reference node driven by the buffer,R_0402_1005Metric,,,top,yes
 1,R20,20k,Resistor 20k 1% 0402. Remove to hold the bias electrode at ground instead of 1.1 V,R_0402_1005Metric,,,top,yes
 1,R22,2k2,Resistor 2k2 1% 0402,R_0402_1005Metric,,,top,yes
 1,R23,33R,Resistor 33R 1% 0402,R_0402_1005Metric,,,top,yes
+1,R28,10M,Resistor 10M 0402: holds the buffer input at the bias voltage when the reference pin is not touching,R_0402_1005Metric,,,top,yes
+2,R30 R31,5k1,"Resistor 5k1 1% 0402, USB-C sink ID",R_0402_1005Metric,,,top,yes
+2,R33 R34,10k,"Resistor 10k 0402, boot strap pull-up",R_0402_1005Metric,,,top,yes
+1,R35,1k,Resistor 1k 1% 0402,R_0402_1005Metric,,,top,yes
 2,U1 U2,ADS131M08,8-channel 24-bit simultaneous-sampling delta-sigma ADC,TQFP-32_5x5mm_P0.5mm,Texas Instruments,ADS131M08IPBSR,top,yes
 1,U3,LP5907MFX-3.3,Low-noise 3.3 V LDO for the analog rail,SOT-23-5,Texas Instruments,LP5907MFX-3.3/NOPB,top,yes
 1,U4,OPA376,"Low-noise precision op-amp, unity-gain reference buffer",SOT-23-5,Texas Instruments,OPA376AIDBVR,top,yes
+1,U5,ESP32-C3-WROOM-02,"ESP32-C3 Wi-Fi / Bluetooth LE module with PCB antenna, 4 MB flash",ESP32-C3-WROOM-02_NoVias,Espressif,ESP32-C3-WROOM-02-N4,top,yes
+1,U6,AP2112K-3.3,3.3 V 600 mA LDO for the radio module and digital rail,SOT-23-5,Diodes Incorporated,AP2112K-3.3TRG1,top,yes
 1,Y1,8.192MHz,8.192 MHz 3.3 V LVCMOS oscillator 2.5x2.0 mm,Oscillator_SMD_SiT_PQFN-4Pin_2.5x2.0mm,SiTime,SiT1602BC-11-33E-8.192000,top,yes
 1,R19,4k7,"Resistor 4k7 0402, NOT FITTED. Fit (and remove R18) to bypass the buffer",R_0402_1005Metric,,,top,no (option)

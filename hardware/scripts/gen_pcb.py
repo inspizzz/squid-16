@@ -124,7 +124,7 @@ def build():
     board.SetLayerName(pcbnew.In2_Cu, "In2.Cu")
     board.SetLayerType(pcbnew.In1_Cu, pcbnew.LT_POWER)
     ds = board.GetDesignSettings()
-    ds.SetBoardThickness(MM(1.6))
+    ds.SetBoardThickness(MM(d.BOARD_THICKNESS))
 
     nets = {}
     unconnected = {(p.ref, num): gen_sch.unconnected_net(p, num)
@@ -165,37 +165,44 @@ def build():
         if missing:
             raise SystemExit(f"{p.ref}: pins {missing} not on footprint {p.fp}")
 
-    # outline
-    c = pcbnew.PCB_SHAPE(board)
-    c.SetShape(pcbnew.SHAPE_T_CIRCLE)
-    c.SetLayer(pcbnew.Edge_Cuts)
-    c.SetCenter(P(0, 0))
-    c.SetEnd(P(d.BOARD_DIAMETER / 2, 0))
-    c.SetWidth(MM(0.1))
-    board.Add(c)
+    # outline: a circle with a short straight edge under the USB-C socket
+    R = d.BOARD_DIAMETER / 2
+    hx = math.sqrt(R * R - d.BOARD_FLAT_Y ** 2)
+    arc = pcbnew.PCB_SHAPE(board)
+    arc.SetShape(pcbnew.SHAPE_T_ARC)
+    arc.SetLayer(pcbnew.Edge_Cuts)
+    arc.SetArcGeometry(P(hx, d.BOARD_FLAT_Y), P(0, R), P(-hx, d.BOARD_FLAT_Y))
+    arc.SetWidth(MM(0.1))
+    board.Add(arc)
+    flat = pcbnew.PCB_SHAPE(board)
+    flat.SetShape(pcbnew.SHAPE_T_SEGMENT)
+    flat.SetLayer(pcbnew.Edge_Cuts)
+    flat.SetStart(P(-hx, d.BOARD_FLAT_Y))
+    flat.SetEnd(P(hx, d.BOARD_FLAT_Y))
+    flat.SetWidth(MM(0.1))
+    board.Add(flat)
 
     add_zone(board, pcbnew.In1_Cu, nets["GND"], "GND_PLANE", d.BOARD_DIAMETER / 2 + 1)
 
     # ---- silkscreen -------------------------------------------------------
     F, B = pcbnew.F_SilkS, pcbnew.B_SilkS
-    text(board, "USB", 0, 15.35, F, 0.6)
-    text(board, "D0", -11.9, 8.4, F, 0.6)
-    text(board, "5V", 11.6, 9.5, F, 0.6)
-    text(board, "REF", -12.6, 6.95, F, 0.6)
-    text(board, "BIAS", -12.2, -7.95, F, 0.6)
-    text(board, "LIMPET", 0, 0.5, B, 0.55, mirror=True)
-    text(board, "16 rA", 0, -0.5, B, 0.55, mirror=True)
+    text(board, "REF", -18.2, 6.5, F, 0.6)
+    text(board, "BIAS", -17.6, -2.7, F, 0.6)
+    text(board, "BOOT", -13.4, 4.6, F, 0.5)
+    text(board, "GND", -13.3, 2.7, F, 0.5)
+    text(board, f"LIMPET-16 r{d.REVISION}", 0, -1.0, F, 0.6)
+    cx, cy = d.CLUSTER
+    text(board, "LIMPET", cx, cy + 0.5, B, 0.55, mirror=True)
+    text(board, f"16 r{d.REVISION}", cx, cy - 0.5, B, 0.55, mirror=True)
     r_lab_out = d.R_OUTER + 2.95
     for name in d.ELECTRODES:
         ring, ang = d.ELECTRODES[name]
         label = name.replace("CH", "")
         a = math.radians(ang)
-        if ring == "o":
-            text(board, label, r_lab_out * math.cos(a), r_lab_out * math.sin(a), B, 0.7, mirror=True)
-        else:
-            rr = 3.05
-            text(board, {"REF": "R", "BIAS": "B"}.get(label, label),
-                 rr * math.cos(a), rr * math.sin(a), B, 0.7, mirror=True)
+        rr = r_lab_out if ring == "o" else 3.05
+        if ring == "i":
+            label = {"REF": "R", "BIAS": "B"}.get(label, label)
+        text(board, label, cx + rr * math.cos(a), cy + rr * math.sin(a), B, 0.7, mirror=True)
 
     pcbnew.SaveBoard(OUT, board)
     write_project()   # after SaveBoard, which would otherwise reset it

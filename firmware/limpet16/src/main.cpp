@@ -1,5 +1,5 @@
 // Limpet-16 firmware: two ADS131M08 converters -> Bluetooth LE notifications.
-// Board: Seeed Studio XIAO ESP32-S3 plugged into the Limpet-16 sockets.
+// Board: Limpet-16 revision B (ESP32-C3-WROOM-02 module soldered on).
 // SPDX-License-Identifier: MIT
 //
 // STATUS: written against the datasheets and unit-tested on a PC with a
@@ -12,13 +12,16 @@
 #include "protocol.h"
 
 // ---- wiring (see docs/DESIGN.md) -------------------------------------------
-static const int PIN_CS_A = D0;    // ADC A, channels 1-8
-static const int PIN_DRDY = D1;    // data ready from ADC A (both run in step)
-static const int PIN_RESET = D2;   // SYNC/RESET of both converters
-static const int PIN_CS_B = D3;    // ADC B, channels 9-16
-static const int PIN_SCLK = D8;
-static const int PIN_MISO = D9;
-static const int PIN_MOSI = D10;
+// GPIO numbers of the ESP32-C3. GPIO2, 8 and 9 are boot-mode pins and GPIO18/19
+// are USB; none of them is used for the converters.
+static const int PIN_DRDY = 4;     // data ready from ADC A (both run in step)
+static const int PIN_RESET = 5;    // SYNC/RESET of both converters
+static const int PIN_CS_B = 6;     // ADC B, channels 9-16
+static const int PIN_CS_A = 7;     // ADC A, channels 1-8
+static const int PIN_SCLK = 10;
+static const int PIN_MISO = 20;
+static const int PIN_MOSI = 21;
+static const int PIN_LED = 3;      // status LED, on when high
 
 // ---- settings ---------------------------------------------------------------
 static const uint8_t DEFAULT_GAIN_CODE = 2;   // gain 4: +-300 mV, 0.0358 uV per count
@@ -83,7 +86,7 @@ static bool startConverters(uint8_t gainCode) {
   delay(2);
   digitalWrite(PIN_RESET, HIGH);
   delay(5);
-  // A XIAO plugged in the wrong way round, or a missing clock, shows up here.
+  // A missing clock or a soldering fault on a converter shows up here.
   uint16_t idA = adcA.read_reg(ads131::REG_ID);
   uint16_t idB = adcB.read_reg(ads131::REG_ID);
   Serial.printf("ADC A id 0x%04X, ADC B id 0x%04X\n", idA, idB);
@@ -185,28 +188,28 @@ static void startBluetooth() {
 }
 
 void setup() {
-  // Park the bus before anything else: the board has no pull-ups on these lines.
+  // Park the bus before anything else (the board's pull-ups hold it until here).
   pinMode(PIN_CS_A, OUTPUT); digitalWrite(PIN_CS_A, HIGH);
   pinMode(PIN_CS_B, OUTPUT); digitalWrite(PIN_CS_B, HIGH);
   pinMode(PIN_RESET, OUTPUT); digitalWrite(PIN_RESET, HIGH);
   pinMode(PIN_DRDY, INPUT_PULLUP);
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(PIN_LED, OUTPUT);
   Serial.begin(115200);
   SPI.begin(PIN_SCLK, PIN_MISO, PIN_MOSI, -1);
 
   spiLock = xSemaphoreCreateMutex();
   packetQueue = xQueueCreate(64, sizeof(Packet));
   adcOk = startConverters(DEFAULT_GAIN_CODE);
-  Serial.println(adcOk ? "converters configured" : "CONVERTERS NOT FOUND: check XIAO orientation");
+  Serial.println(adcOk ? "converters configured" : "CONVERTERS NOT FOUND: check clock and soldering");
   startBluetooth();
-  xTaskCreatePinnedToCore(adcLoop, "adc", 4096, nullptr, 10, &adcTask, 1);
+  xTaskCreate(adcLoop, "adc", 4096, nullptr, 10, &adcTask);   // the C3 has one core
   attachInterrupt(digitalPinToInterrupt(PIN_DRDY), onDrdy, FALLING);
   // Bluetooth start-up took many sample periods: begin from clean buffers.
   if (adcOk) syncPulse();
 }
 
 void loop() {
-  // LED (active low on the XIAO): solid = streaming, slow blink = waiting for a
+  // LED: solid = streaming, slow blink = waiting for a
   // connection, fast double blink = converters not found.
   static uint32_t lastLed = 0;
   Packet p;
@@ -221,6 +224,6 @@ void loop() {
     if (!adcOk) on = ((now / 100) % 10) == 0 || ((now / 100) % 10) == 2;
     else if (connected) on = true;
     else on = ((now / 500) % 2) == 0;
-    digitalWrite(LED_BUILTIN, on ? LOW : HIGH);
+    digitalWrite(PIN_LED, on ? HIGH : LOW);
   }
 }

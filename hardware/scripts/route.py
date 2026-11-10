@@ -41,7 +41,9 @@ VIA_D, VIA_DRILL = 0.5, 0.3
 EDGE = 0.3
 VIA_COST = 28.0                 # in grid steps
 RIP_COST = 40.0                 # per grid step through somebody else's track
-MAX_RIPS = 250
+MAX_RIPS = 250                  # per phase
+PHASES = 5
+FREEZE_AFTER = 6              # rip-ups before a net becomes immovable
 FREE, BLOCK = -1, -2
 
 MM = pcbnew.FromMM
@@ -71,6 +73,18 @@ class Maps:
         self.via = np.full((N, N), FREE, dtype=np.int32)
         self.trk[:, Maps.R > HALF - EDGE - W_PWR / 2 - SLOP] = BLOCK
         self.via[Maps.R > HALF - EDGE - VIA_D / 2 - SLOP] = BLOCK
+        # straight edge under the USB-C socket
+        self.trk[:, Maps.Y < d.BOARD_FLAT_Y + EDGE + W_PWR / 2 + SLOP] = BLOCK
+        self.via[Maps.Y < d.BOARD_FLAT_Y + EDGE + VIA_D / 2 + SLOP] = BLOCK
+        # no copper at all under the module's antenna
+        mx, my = d.MODULE_XY
+        ant = Maps.Y > my + d.MODULE_ANTENNA_FROM_CENTRE - 0.3
+        self.trk[:, ant] = BLOCK
+        self.via[ant] = BLOCK
+        # Top-layer tracks may run under the module body (it is solder-masked
+        # underneath, as on Espressif's own boards) but not under its centre
+        # ground pad, which is handled as an ordinary pad.
+        Maps.UNDER = np.zeros_like(ant)
 
     def copy(self):
         m = Maps.__new__(Maps)
@@ -88,21 +102,20 @@ class Maps:
         iy0, iy1 = max(0, to_idx(y0 - pad) - 1), min(N, to_idx(y1 + pad) + 2)
         return slice(iy0, iy1), slice(ix0, ix1)
 
-    def add_rect(self, layers, x0, y0, x1, y1, net):
+    def add_box(self, layers, cx, cy, w, h, ang, net):
+        """Rectangle w x h centred on cx,cy and turned by ang degrees."""
         pad = W_SIG / 2 + CLR + SLOP
         vpad = VIA_D / 2 + CLR + SLOP
-        sy, sx = self._window(x0, y0, x1, y1, vpad)
-        X, Y = self.X[sy, sx], self.Y[sy, sx]
-        dx = np.maximum(np.maximum(x0 - X, X - x1), 0)
-        dy = np.maximum(np.maximum(y0 - Y, Y - y1), 0)
-        dist = np.hypot(dx, dy)
+        r = math.hypot(w, h) / 2
+        sy, sx = self._window(cx - r, cy - r, cx + r, cy + r, vpad)
+        dist = box_distance(self.X[sy, sx], self.Y[sy, sx], cx, cy, w, h, ang)
         for l in layers:
             self._claim(self.trk[l][sy, sx], dist < pad, net)
         self.via[sy, sx][dist < vpad] = BLOCK
 
-    def add_disc(self, layers, cx, cy, r, net):
-        pad = W_SIG / 2 + CLR + SLOP
-        vpad = VIA_D / 2 + CLR + SLOP
+    def add_disc(self, layers, cx, cy, r, net, extra=0.0):
+        pad = W_SIG / 2 + CLR + SLOP + extra
+        vpad = VIA_D / 2 + CLR + SLOP + extra
         sy, sx = self._window(cx - r, cy - r, cx + r, cy + r, vpad)
         dist = np.hypot(self.X[sy, sx] - cx, self.Y[sy, sx] - cy) - r
         for l in layers:
@@ -122,6 +135,14 @@ class Maps:
         self.via[sy, sx][dist < vpad] = BLOCK
 
 
+def box_distance(X, Y, cx, cy, w, h, ang):
+    """Distance from points to a rotated rectangle (0 inside)."""
+    a = math.radians(ang)
+    u = (X - cx) * math.cos(a) + (Y - cy) * math.sin(a)
+    v = -(X - cx) * math.sin(a) + (Y - cy) * math.cos(a)
+    return np.hypot(np.maximum(np.abs(u) - w / 2, 0), np.maximum(np.abs(v) - h / 2, 0))
+
+
 MOVES = ((0, 1, 1.0), (0, -1, 1.0), (1, 0, 1.0), (-1, 0, 1.0),
          (1, 1, 1.4142), (1, -1, 1.4142), (-1, 1, 1.4142), (-1, -1, 1.4142))
 
@@ -133,12 +154,20 @@ class Router:
         self.pads = {}           # net -> [(layer idx, inside(), centre, label)]
         self.copper = {}         # net -> {"t": [(l,ax,ay,bx,by,w)], "v": [(x,y)]}
         self.fixed = set()       # nets that may not be ripped up
+        self.pinned = set()      # nets frozen as soon as they are routed
         self.failed = []
         self.rips = 0
+        self.budget = MAX_RIPS
         self.ripcount = {}       # net id -> times ripped (makes it dearer to rip again)
         self.pwr = set(d.POWER_NETS)
         self.base = Maps()       # pads only
         self._load()
+        # applied after the pads so the module's own centre pad is covered too
+        self.base.trk[0][Maps.UNDER] = BLOCK
+        self.pre = self._refn_spines()   # hand-placed copper: net -> [(l,ax,ay,bx,by,w)]
+        for name, segs in self.pre.items():
+            for l, ax, ay, bx, by, w in segs:
+                self.base.add_seg(l, ax, ay, bx, by, w, self.netid[name])
         # nets with many pads are expensive to re-route, so dearer to rip up
         self.weight = {self.netid[n]: 1.0 + 0.25 * len(p) for n, p in self.pads.items()}
         self.rebuild()
@@ -150,24 +179,52 @@ class Router:
             for pad in fp.Pads():
                 name = pad.GetNetname()
                 net = self.netid.setdefault(name, len(self.netid)) if name else BLOCK
-                l = 2 if pad.IsOnLayer(pcbnew.B_Cu) else 0
                 c = pad.GetPosition()
                 cx, cy = pcbnew.ToMM(c.x) - o[0], o[1] - pcbnew.ToMM(c.y)
-                bb = pad.GetBoundingBox()
-                w, h = pcbnew.ToMM(bb.GetWidth()), pcbnew.ToMM(bb.GetHeight())
-                if pad.GetShape() == pcbnew.PAD_SHAPE_CIRCLE:
+                if pad.GetAttribute() == pcbnew.PAD_ATTRIB_NPTH:
+                    # a bare hole: nothing may come near it on any layer
+                    hole = pcbnew.ToMM(pad.GetDrillSize().x) / 2
+                    self.base.add_disc(range(NL), cx, cy, hole, BLOCK, extra=0.25 - CLR)
+                    continue
+                if not pad.IsOnCopperLayer():
+                    continue                      # paste-only apertures
+                if pad.GetAttribute() == pcbnew.PAD_ATTRIB_PTH:
+                    raise SystemExit(f"{fp.GetReference()}: plated through-hole pads are not supported")
+                on_back = pad.IsOnLayer(pcbnew.B_Cu)
+                l = 2 if on_back else 0
+                size = pad.GetSize(pcbnew.B_Cu if on_back else pcbnew.F_Cu)
+                w, h = pcbnew.ToMM(size.x), pcbnew.ToMM(size.y)
+                if pad.GetShape(pcbnew.B_Cu if on_back else pcbnew.F_Cu) == pcbnew.PAD_SHAPE_CIRCLE:
                     self.base.add_disc([l], cx, cy, w / 2, net)
                     inside = lambda X, Y, cx=cx, cy=cy, r=w / 2: np.hypot(X - cx, Y - cy) < r - 0.1
                 else:
-                    bx = pcbnew.ToMM(bb.GetCenter().x) - o[0]
-                    by = o[1] - pcbnew.ToMM(bb.GetCenter().y)
-                    x0, x1, y0, y1 = bx - w / 2, bx + w / 2, by - h / 2, by + h / 2
-                    self.base.add_rect([l], x0, y0, x1, y1, net)
-                    inside = lambda X, Y, x0=x0, x1=x1, y0=y0, y1=y1: \
-                        (X > x0 + 0.05) & (X < x1 - 0.05) & (Y > y0 + 0.05) & (Y < y1 - 0.05)
+                    ang = pad.GetOrientationDegrees()
+                    self.base.add_box([l], cx, cy, w, h, ang, net)
+                    inside = lambda X, Y, cx=cx, cy=cy, w=w, h=h, ang=ang: \
+                        box_distance(X, Y, cx, cy, w - 0.12, h - 0.12, ang) == 0
                 if name:
                     self.pads.setdefault(name, []).append(
                         (l, inside, (cx, cy), f"{fp.GetReference()}.{pad.GetNumber()}"))
+
+    def _refn_spines(self):
+        """All sixteen negative inputs share one net. Joining them underneath
+        each converter, inside its ring of pads, leaves the outside free for
+        the sixteen positive inputs to fan out."""
+        segs = []
+        k = 1.6                                  # spine distance from the chip centre
+        for ref, (cx, cy) in d.ADC_XY.items():
+            pts = [c for l, _, c, lbl in self.pads["REFN"] if lbl.startswith(ref + ".")]
+            side = [c for c in pts if abs(c[0] - cx) > abs(c[1] - cy)]
+            sx = cx + math.copysign(k, side[0][0] - cx)
+            segs.append((0, sx, cy - k, sx, cy + k, W_SIG))
+            for px, py in pts:
+                if abs(px - cx) > abs(py - cy):
+                    segs.append((0, px, py, sx, py, W_SIG))
+                else:
+                    ey = cy + math.copysign(k, py - cy)
+                    segs.append((0, px, py, px, ey, W_SIG))
+                    segs.append((0, px, ey, sx, ey, W_SIG))
+        return {"REFN": segs}
 
     def rebuild(self):
         """Recompute the obstacle maps from pads plus all committed copper.
@@ -211,12 +268,15 @@ class Router:
         else:
             h = lambda y, x: 0.0
 
+        under = Maps.UNDER
+
         def via_ok(y, x):
             """0 = fine, >0 = extra cost (relaxed), -1 = impossible."""
-            if via[y, x] == FREE and all(trk[k, y, x] in (FREE, net) for k in range(NL)):
+            ks = range(1, NL) if under[y, x] else range(NL)
+            if via[y, x] == FREE and all(trk[k, y, x] in (FREE, net) for k in ks):
                 return 0.0
             if relaxed and hvia[y, x] == FREE and \
-                    all(htrk[k, y, x] in (FREE, net) for k in range(NL)):
+                    all(htrk[k, y, x] in (FREE, net) for k in ks):
                 return RIP_COST * 6
             return -1.0
 
@@ -325,7 +385,7 @@ class Router:
             res = self._search(net, sources, targets, to_via)
             if res is not None:
                 return res
-            if self.rips >= MAX_RIPS:
+            if self.rips >= self.budget:
                 return None
             res = self._search(net, sources, targets, to_via, relaxed=True)
             if res is None:
@@ -381,22 +441,39 @@ class Router:
         net = self.netid[name]
         ripped = set()
         self.copper.pop(name, None)
+        # A net that keeps getting pulled up is frozen once re-routed, so the
+        # others have to find a way round it; this is what makes the loop end.
+        if self.ripcount.get(net, 0) >= FREEZE_AFTER or name in self.pinned:
+            self.fixed.add(name)
         self.rebuild()
         terms = list(self.pads[name])
+        mx = sum(t[2][0] for t in terms) / len(terms)
+        my = sum(t[2][1] for t in terms) / len(terms)
+        terms.sort(key=lambda t: math.hypot(t[2][0] - mx, t[2][1] - my))
         first = terms[0]
         tree = set(self._cells(first[0], first[1], net))
         done_c = [first[2]]
         todo = terms[1:]
+        later, retried = [], set()
         while todo:
             todo.sort(key=lambda t: min(math.hypot(t[2][0] - c[0], t[2][1] - c[1]) for c in done_c))
             l, inside, c, lbl = todo.pop(0)
             cells = self._cells(l, inside, net)
             res = self._connect(name, cells, tree, ripped) if cells and tree else None
             if res is None:
-                self.failed.append((name, lbl))
+                # try once more at the end, when the rest of the net is in place
+                if lbl not in retried:
+                    retried.add(lbl)
+                    later.append((l, inside, c, lbl))
+                else:
+                    self.failed.append((name, lbl))
+                if not todo and later:
+                    todo, later = later, []
                 continue
             tree |= self._commit(name, res[0]) | set(cells)
             done_c.append(c)
+            if not todo and later:
+                todo, later = later, []
         return ripped
 
     def route_ground(self):
@@ -424,29 +501,48 @@ class Router:
 
     def run(self, order):
         queue = list(order)
-        while queue:
-            name = queue.pop(0)
-            self.failed = [f for f in self.failed if f[0] != name]
-            ripped = self.route_ground() if name == "GND" else self.route_net(name)
-            if ripped:
-                print(f"  {name}: ripped up {', '.join(sorted(ripped))}")
-            for r in sorted(ripped):
-                if r not in queue:
-                    queue.append(r)
+        for phase in range(PHASES):
+            while queue:
+                name = queue.pop(0)
+                self.failed = [f for f in self.failed if f[0] != name]
+                ripped = self.route_ground() if name == "GND" else self.route_net(name)
+                if ripped:
+                    print(f"  {name}: ripped up {', '.join(sorted(ripped))}")
+                for r in sorted(ripped):
+                    if r not in queue:
+                        queue.append(r)
+            bad = []
+            for f in self.failed:
+                if f[0] != "GND" and f[0] not in bad:
+                    bad.append(f[0])
+            print(f"phase {phase + 1}: {len(bad)} nets incomplete, {self.rips} rip-ups so far")
+            if not bad:
+                break
+            # thaw everything, lift the ground tracks and vias (they are cheap
+            # to redo and may be what is in the way), and let the unfinished
+            # nets have another go with a fresh budget; ground goes back last
+            self.fixed = set()
+            self.copper.pop("GND", None)
+            self.failed = [f for f in self.failed if f[0] != "GND"]
+            self.ripcount = {}
+            self.budget = self.rips + MAX_RIPS
+            queue = bad + ["GND"]
 
     # ------------------------------------------------------------- writing
     def write(self):
         b, o = self.b, d.ORIGIN
         P = lambda x, y: pcbnew.VECTOR2I(MM(o[0] + x), MM(o[1] - y))
         nt = nv = 0
-        for name, c in self.copper.items():
+        everything = [(n, c["t"], c["v"]) for n, c in self.copper.items()] + \
+                     [(n, segs, []) for n, segs in self.pre.items()]
+        for name, tracks, vias in everything:
             ni = b.FindNet(name)
-            for l, ax, ay, bx, by, w in c["t"]:
+            for l, ax, ay, bx, by, w in tracks:
                 t = pcbnew.PCB_TRACK(b)
                 t.SetStart(P(ax, ay)); t.SetEnd(P(bx, by))
                 t.SetWidth(MM(w)); t.SetLayer(LAYERS[l]); t.SetNet(ni)
                 b.Add(t); nt += 1
-            for x, y in c["v"]:
+            for x, y in vias:
                 v = pcbnew.PCB_VIA(b)
                 v.SetPosition(P(x, y))
                 v.SetViaType(pcbnew.VIATYPE_THROUGH)
@@ -466,11 +562,14 @@ def net_order(r):
         return (max(xs) - min(xs)) + (max(ys) - min(ys))
     names = [n for n in r.pads if n != "GND" and len(r.pads[n]) > 1]
     first = ["REFN"] + [n for n in names if n.startswith(("CAP_", "REFIN_"))]
+    # the USB pair has to cross over between the socket's pads, and the clock
+    # sits in the tightest spot: both go in while the board is still empty
+    first += [n for n in ("USB_DP", "USB_DN", "OSC_OUT", "ADC_CLK") if n in names]
     ins = sorted([n for n in names if n.startswith("IN")], key=span)
     els = sorted([n for n in names if n.startswith("EL")], key=span)
     pwr = [n for n in ("AVDD", "DVDD", "+5V", "+3V3") if n in names]
     rest = sorted([n for n in names if n not in first + ins + els + pwr], key=span)
-    return first + ins + els + pwr + rest + ["GND"]
+    return first + ins + pwr + rest + els + ["GND"]
 
 
 def main():
@@ -481,7 +580,8 @@ def main():
         if z.GetZoneName() != "GND_PLANE":
             board.Remove(z)
     r = Router(board)
-    r.run(net_order(r))
+    order = net_order(r)
+    r.run(order)
     nt, nv = r.write()
 
     # ground pours on the outer layers, stitched by the ground vias
@@ -492,12 +592,17 @@ def main():
     pcbnew.SaveBoard(PCB, board)
     gen_pcb.write_project()
     print(f"{nt} track segments, {nv} vias, {r.rips} rip-ups")
-    if r.failed:
-        print("NOT ROUTED BY TRACK (ground pads may still be joined by the pour; run check.sh):")
-        for f in r.failed:
+    gnd_left = [f for f in r.failed if f[0] == "GND"]
+    if gnd_left:
+        print("ground pads left to the copper pour (check.sh confirms they are joined):",
+              " ".join(f[1] for f in gnd_left))
+    bad = [f for f in r.failed if f[0] != "GND"]
+    if bad:
+        print("NOT ROUTED:")
+        for f in bad:
             print("  ", *f)
         sys.exit(1)
-    print("all connections routed")
+    print("all signal connections routed")
 
 
 if __name__ == "__main__":

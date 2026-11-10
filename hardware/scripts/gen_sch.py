@@ -29,16 +29,22 @@ def snap(v):
 # ref -> (x, y, rotation). Rotation 90 lays a two-pin part on its side,
 # pin 1 to the left.
 LAYOUT = {
-    "J1": (45, 62, 0), "J2": (100, 62, 0),
-    "U3": (170, 52, 0), "C17": (150, 66, 0), "C18": (195, 66, 0),
-    "FB1": (232, 50, 90), "C19": (255, 66, 0),
-    "Y1": (300, 54, 0), "C28": (280, 66, 0), "R23": (345, 54, 90),
+    "J1": (38, 66, 0), "R30": (72, 82, 0), "R31": (84, 82, 0),
+    "U5": (118, 66, 0),
+    "R29": (160, 52, 0), "R33": (171, 52, 0), "R34": (182, 52, 0),
+    "R36": (193, 52, 0), "R37": (204, 52, 0), "R38": (215, 52, 0),
+    "C33": (160, 84, 0), "C34": (171, 84, 0), "C35": (182, 84, 0),
+    "R35": (62, 96, 90), "D1": (98, 96, 0), "TP3": (140, 62, 0), "TP4": (140, 80, 0),
+    "C28": (196, 84, 0), "Y1": (222, 84, 0), "R23": (262, 84, 90),
+    "U6": (290, 48, 0), "C36": (272, 62, 0), "C37": (308, 62, 0),
+    "U3": (340, 48, 0), "C17": (324, 62, 0), "C18": (358, 62, 0),
+    "FB1": (380, 46, 90), "C19": (398, 62, 0),
     "U1": (70, 150, 0), "C20": (112, 128, 0), "C21": (132, 128, 0),
     "C22": (112, 160, 0), "C23": (132, 160, 0),
     "U2": (200, 150, 0), "C24": (242, 128, 0), "C25": (262, 128, 0),
     "C26": (242, 160, 0), "C27": (262, 160, 0),
     "P17": (294, 120, 0), "TP1": (318, 117, 0),
-    "R17": (330, 137.5, 90), "U4": (378, 137.5, 0), "C29": (402, 122, 0),
+    "R17": (330, 137.5, 90), "U4": (378, 137.5, 0), "C29": (402, 122, 0), "R28": (330, 147.5, 90),
     "R18": (378, 158, 90), "R19": (330, 158, 90), "C31": (399, 160, 0),
     "P18": (294, 190, 0), "TP2": (318, 187, 0),
     "R20": (372, 190, 0), "R21": (388, 190, 0), "C30": (402, 190, 0),
@@ -52,9 +58,10 @@ for _ch in range(1, 17):
     LAYOUT[f"C{_ch}"] = (_x0 + 66, _y, 90)
 
 TITLES = [
-    ("XIAO ESP32-S3 sockets (USB-C at the top)", 20, 40),
-    ("Power: quiet 3.3 V analog rail, filtered digital rail", 135, 36),
-    ("Clock: 8.192 MHz to both converters", 270, 36),
+    ("USB-C: power and flashing", 20, 34),
+    ("Radio module", 100, 34),
+    ("Enable, boot straps, pull-ups", 152, 34),
+    ("Power: 5 V in, 3.3 V for the module, quiet 3.3 V for the analog side", 268, 34),
     ("ADC A: channels 1-8", 20, 106),
     ("ADC B: channels 9-16", 152, 106),
     ("Reference electrode and unity-gain buffer", 288, 106),
@@ -62,7 +69,8 @@ TITLES = [
     ("Electrodes and input filters: pogo pin -> 4k7 -> ADC input, 220 pF to ground", 20, 228),
 ]
 NOTES = [
-    ("D0 CS1   D1 DRDY   D2 RESET   D3 CS2\nD4-D7 unused   D8 SCLK   D9 MISO   D10 MOSI", 20, 86),
+    ("Clock: 8.192 MHz to both converters", 232, 100),
+    ("Short BOOT to GND while plugging in USB to force download mode.", 132, 100),
     ("R18 fitted, R19 not fitted: buffered reference (default).\n"
      "R19 fitted, R18 removed, C31 changed to 220 pF: electrode drives the reference node directly.", 288, 170),
     ("Remove R20 to hold the bias electrode at ground (then use the\n"
@@ -222,12 +230,14 @@ def build():
             # KiCad mirrors the justification of text on a symbol turned 180
             j = "right" if rot == 180 else "left"
             ra, va = (x + 2.3, y - 1.27, j), (x + 2.3, y + 1.27, j)
+        elif p.ref == "U5":
+            ra, va = (x - 15.2, y - 24.5, "left"), (x + 2.5, y - 24.5, "left")
+        elif p.ref == "J1":
+            ra, va = (x - 10, y - 20.5, "left"), (x - 4, y - 20.5, "left")
         elif p.ref in ("U1", "U2"):
             ra, va = (x - 15.2, y - 32.5, "left"), (x + 5.5, y - 32.5, "left")
         elif p.ref[0] == "U":
             ra, va = (x + 2.5, y - 6.5, "left"), (x + 2.5, y + 6.5, "left")
-        elif p.ref[0] == "J":
-            ra, va = (x - 2, y - 11.5, "left"), (x - 2, y + 11.5, "left")
         elif p.ref[0] == "Y":
             ra, va = (x + 3, y - 8, "left"), (x + 3, y + 8, "left")
         elif p.ref.startswith("TP"):
@@ -260,8 +270,8 @@ def build():
             else:
                 sh.label(net, fx, fy, out, key)
     # tell ERC which nets are driven from outside the sheet
-    for i, net in enumerate(["+5V", "+3V3", "DVDD", "GND"]):
-        fx, fy = snap(150 + i * 22), snap(88)
+    for i, net in enumerate(["+5V", "DVDD", "GND"]):
+        fx, fy = snap(300 + i * 16), snap(84)
         sh.power("PWR_FLAG", fx, fy, 0, "flag:" + net)
         sh.wire(fx, fy, fx, snap(fy + STUB), "flag:" + net)
         if net == "GND":
@@ -276,7 +286,7 @@ def build():
     root = [Sym("kicad_sch"), [Sym("version"), 20250114], [Sym("generator"), "limpet16_gen_sch"],
             [Sym("generator_version"), "9.0"], [Sym("uuid"), d.ROOT_UUID], [Sym("paper"), "A3"],
             [Sym("title_block"), [Sym("title"), "Limpet-16: 16-channel dry-electrode EEG front end"],
-             [Sym("rev"), "A"], [Sym("company"), "Open hardware, CERN-OHL-P-2.0"],
+             [Sym("rev"), d.REVISION], [Sym("company"), "Open hardware, CERN-OHL-P-2.0"],
              [Sym("comment"), 1, "Generated from hardware/scripts/design.py. Edit that file, not this one."],
              [Sym("comment"), 2, "Untested revision. Not a medical device."]],
             [Sym("lib_symbols")] + [v[0] for v in sh.libs.values()]]

@@ -24,12 +24,9 @@ def main():
     for p in d.PARTS:
         if p.ref.startswith("TP"):
             continue                      # bare copper pads, nothing to buy
-        # electrodes and sockets differ only in their label, buy them as one line
-        value = {"P": "Pogo pin", "J": "Socket 1x7"}.get(p.ref[0], p.value) if p.mpn else p.value
-        desc = ("1x7 SMD socket 2.54 mm, single row, vertical, legs alternating left/right. "
-                "Listed part is obsolete: any socket matching the footprint will do, check the pad pattern"
-                ) if p.ref[0] == "J" else p.desc
-        key = (value, p.fp, p.mpn, p.mfr, desc, p.dnp, p.side)
+        # the electrodes differ only in their label, buy them as one line
+        value = "Pogo pin" if p.ref[0] == "P" else p.value
+        key = (value, p.fp, p.mpn, p.mfr, p.desc, p.dnp, p.side)
         groups.setdefault(key, []).append(p.ref)
     rows = sorted(groups.items(), key=lambda kv: (kv[0][5], refkey(sorted(kv[1], key=refkey)[0])))
     with open(os.path.join(OUT, "bom.csv"), "w", newline="") as f:
@@ -41,12 +38,13 @@ def main():
             w.writerow([len(refs), " ".join(refs), value, desc, fp.split(":")[1], mfr, mpn, side,
                         "no (option)" if dnp else "yes"])
     # JLCPCB wants: Comment, Designator, Footprint, LCSC Part #. Only the top
-    # side is machine-assembled; pogo pins and sockets are soldered by hand.
+    # side is machine-assembled; the pogo pins are soldered by hand.
+    hand = {p.ref for p in d.PARTS if p.hand}
     with open(os.path.join(OUT, "bom-jlcpcb.csv"), "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["Comment", "Designator", "Footprint", "LCSC Part #"])
         for (value, fp, mpn, mfr, desc, dnp, side), refs in rows:
-            if dnp or side != "top" or refs[0][0] == "J":
+            if dnp or side != "top" or refs[0] in hand:
                 continue
             w.writerow([mpn or f"{value} ({desc})", ",".join(sorted(refs, key=refkey)),
                         fp.split(":")[1], ""])
@@ -57,7 +55,7 @@ def main():
             w = csv.writer(g)
             w.writerow(["Designator", "Mid X", "Mid Y", "Layer", "Rotation"])
             for row in csv.DictReader(f):
-                if row["Ref"][0] in "JT":          # sockets are hand-soldered, test pads are bare
+                if row["Ref"].startswith("TP") or row["Ref"] in hand:   # bare pads, hand-soldered parts
                     continue
                 w.writerow([row["Ref"], row["PosX"] + "mm", row["PosY"] + "mm", "Top", row["Rot"]])
     n = sum(len(r) for k, r in groups.items() if not k[5])

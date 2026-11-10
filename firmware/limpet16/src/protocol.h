@@ -14,11 +14,12 @@ constexpr size_t kPacketBytes = 2 + kChannels * 3 + 1;
 constexpr uint8_t kPacketStart = 0xA0;
 constexpr uint8_t kPacketEnd = 0xC0;
 
-// The board wires the ADC inputs in reverse so that no tracks cross:
-//   channel n (1..8)  = ADC A input AIN(8 - n)
+// Board revision B. ADC B is mounted turned by 180 degrees, so its inputs run
+// the other way round the board:
+//   channel n (1..8)  = ADC A input AIN(n - 1)
 //   channel n (9..16) = ADC B input AIN(16 - n)
 inline void order_channels(const int32_t adc_a[8], const int32_t adc_b[8], int32_t out[kChannels]) {
-  for (int n = 1; n <= 8; n++) out[n - 1] = adc_a[8 - n];
+  for (int n = 1; n <= 8; n++) out[n - 1] = adc_a[n - 1];
   for (int n = 9; n <= 16; n++) out[n - 1] = adc_b[16 - n];
 }
 
