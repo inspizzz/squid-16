@@ -87,7 +87,8 @@ def exp_wiring_and_data_path():
         if abs(freqs[k] - want) > 0.11:
             wrong.append((ch + 1, float(freqs[k]), want))
         amp_err = max(amp_err, abs(spec[k] - amp_v * 1e6) / (amp_v * 1e6))
-    return {"gpio_checks": gpio_ok, "gpio_all_ok": all(gpio_ok.values()),
+    dist = [math.hypot(e["xy"][0] - m.REF_XY[0], e["xy"][1] - m.REF_XY[1]) for e in m.CHANNELS]
+    return {"pin_to_reference_mm": [min(dist), max(dist)], "gpio_checks": gpio_ok, "gpio_all_ok": all(gpio_ok.values()),
             "channels_in_wrong_place": wrong, "max_amplitude_error_percent": 100 * amp_err,
             "packets": n, "packets_lost_or_misframed": lost}
 
@@ -120,14 +121,20 @@ def exp_monte_carlo(trials=200_000, seed=1):
     torch, where = _backend()
     rng = np.random.default_rng(seed)
     lo, hi = np.log(Z_RANGE[0]), np.log(Z_RANGE[1])
+    both = dict(gain=4, cap_to_refn=True, hold=100e6)
     cases = {
         "as built, gain 4": dict(gain=4),
         "as built, gain 8": dict(gain=8),
-        "gain 8, hold resistor 100M instead of 10M": dict(gain=8, hold=100e6),
-        "gain 8, filter capacitors 47 pF instead of 220 pF": dict(gain=8, c_shunt=47e-12),
-        "gain 8, filter capacitors returned to REFN, not GND": dict(gain=8, cap_to_refn=True),
-        "gain 8, both: caps to REFN and 100M hold": dict(gain=8, cap_to_refn=True, hold=100e6),
-        "gain 8, reference not buffered (R19 option)": dict(gain=8, unbuffered=True),
+        "gain 4, hold resistor 100M instead of 10M": dict(gain=4, hold=100e6),
+        "gain 4, filter capacitors 47 pF instead of 220 pF": dict(gain=4, c_shunt=47e-12),
+        "gain 4, filter capacitors returned to REFN, not GND": dict(gain=4, cap_to_refn=True),
+        "gain 4, both changes (caps to REFN, 100M hold)": both,
+        "gain 4, reference not buffered (R19 option)": dict(gain=4, unbuffered=True),
+        # the converter's input-to-ground impedance is not in the datasheet: sweep it
+        "as built, gain 4, if input-to-ground is 10M": dict(gain=4, zin_cm=10e6),
+        "as built, gain 4, if input-to-ground is 1M": dict(gain=4, zin_cm=1e6),
+        "both changes, if input-to-ground is 10M": dict(both, zin_cm=10e6),
+        "both changes, if input-to-ground is 1M": dict(both, zin_cm=1e6),
     }
     out = {"device": where, "trials": trials, "contact_range_ohm": list(Z_RANGE), "cases": {}}
     for name, kw in cases.items():
@@ -142,7 +149,7 @@ def exp_monte_carlo(trials=200_000, seed=1):
                 z_ref = torch.as_tensor(z_ref, device="cuda").to(torch.complex128)
             g_sig, _, g_cm = m.front_end(50.0, z_el, z_ref, **kw2)
             if kw.get("unbuffered"):
-                g_cm = m.common_mode_gain_unbuffered(50.0, z_el, z_ref, kw["gain"])
+                g_cm = m.common_mode_gain_unbuffered(50.0, z_el, z_ref, kw["gain"], kw.get("zin_cm", m.ADC_ZIN_CM))
             if torch is not None:
                 g_sig, g_cm = g_sig.abs().cpu().numpy(), g_cm.abs().cpu().numpy()
             else:
@@ -189,6 +196,10 @@ def exp_offset_headroom():
         absolute = (m.ADC_ABS_MAX_HIGH_GAIN - 1.1) if gain >= 8 else (m.V["avdd"] - 1.1)
         limit = min(diff_limit, absolute / kept)
         row = {"offset_limit_mV": limit * 1e3}
+        if gain >= 8:
+            # contact impedance at which the input current alone uses up the whole range
+            row["contact_limit_kOhm_typical_current"] = m.VREF / gain / m.ADC_IB_TYPICAL[gain] / 1e3
+            row["contact_limit_kOhm_worst_current"] = m.VREF / gain / m.ADC_IB_WORST / 1e3
         for sigma in (25, 50, 100):                          # [assumed] rms mismatch, mV
             p_one = math.erfc(limit * 1e3 / sigma / math.sqrt(2))
             row[f"chance_any_channel_clips_sigma_{sigma}mV"] = 1 - (1 - p_one) ** 16
@@ -214,7 +225,7 @@ def exp_recording(gain=4, seed=7, seconds=40.0, alpha_uv=20.0, sigma_mm=30.0, of
         return alpha_uv * 1e-6 * math.exp(-((xy[0] - offset_mm) ** 2 + xy[1] ** 2) / (2 * sigma_mm ** 2))
     z_ref = float(np.exp(rng.uniform(np.log(Z_RANGE[0]), np.log(Z_RANGE[1]))))
     hp_b, hp_a = [1.0, -1.0], [1.0, -(1 - 1.0 / 2 ** (m.DCBLOCK_CODE + 1))]
-    counts, truth = {}, {}
+    counts, truth, res_sat = {}, {}, []
     for e in m.CHANNELS:
         z = float(np.exp(rng.uniform(np.log(Z_RANGE[0]), np.log(Z_RANGE[1]))))
         gs, gr, _ = m.front_end(10.0, z, z_ref, gain)
@@ -227,12 +238,17 @@ def exp_recording(gain=4, seed=7, seconds=40.0, alpha_uv=20.0, sigma_mm=30.0, of
             * float(m.adc_filter_mag(mains_hz))
         noise = math.sqrt(m.ADC_NOISE_UV[gain] ** 2 + m.thermal_uv(z + 4700, 125) ** 2) * 1e-6
         v = v + rng.normal(0, noise, n) + abs(gs0) * rng.normal(0, 0.05)       # + DC offset, sigma 50 mV
+        if gain >= 8:
+            v = v + m.ADC_IB_TYPICAL[gain] * z                                  # input current through the contact
+            sat = abs(m.ADC_IB_TYPICAL[gain] * z) > m.VREF / gain
+            res_sat.append(e["label"]) if sat else None
         clipped = np.clip(v, -m.VREF / gain, m.VREF / gain)                      # analog range, before the filter
         counts[e["label"]] = m.to_counts(signal.lfilter(hp_b, hp_a, clipped), gain)
     uv, lost = run_firmware(counts, gain)
     half = n // 2
     settle = int(8 * m.FS_DATA)                       # let the high-pass forget the offset step
-    res = {"per_channel": {}, "packets_lost": lost, "gain": gain}
+    res = {"per_channel": {}, "packets_lost": lost, "gain": gain,
+           "channels_saturated_by_input_current": res_sat}
     f, p_open = signal.welch(uv[settle:half], m.FS_DATA, nperseg=1024, axis=0)
     _, p_closed = signal.welch(uv[half + settle // 4:], m.FS_DATA, nperseg=1024, axis=0)
     band = (f >= 8) & (f <= 12)
@@ -244,7 +260,7 @@ def exp_recording(gain=4, seed=7, seconds=40.0, alpha_uv=20.0, sigma_mm=30.0, of
         res["per_channel"][f"CH{ch + 1}"] = {
             "true_pin_minus_ref_uV_peak": truth[f"CH{ch + 1}"],
             "alpha_band_uV_rms_eyes_closed": a_closed, "alpha_band_uV_rms_eyes_open": a_open,
-            "closed_over_open": a_closed / a_open,
+            "closed_over_open": (a_closed / a_open) if a_open > 0 else 0.0,   # flat line = saturated
             "mains_uV_rms": math.sqrt(p_closed[mains, ch].sum() * df)}
     ratios = [c["closed_over_open"] for c in res["per_channel"].values()]
     res["channels_with_alpha_3x_above_baseline"] = int(sum(r > 3 for r in ratios))

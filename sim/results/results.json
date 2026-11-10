@@ -2,6 +2,10 @@
  "board_revision": "B",
  "sample_rate_assumed": 250.0,
  "wiring": {
+  "pin_to_reference_mm": [
+   6.499856998426965,
+   18.91037125494896
+  ],
   "gpio_checks": {
    "SCLK": true,
    "MISO": true,
@@ -36,11 +40,11 @@
     0.2466324655579464
    ],
    "8": [
-    0.9853701887623281,
-    0.966139598126813,
-    0.9043652331345261,
-    0.7646699350579845,
-    0.49632844372572754
+    0.9961925316561623,
+    0.9910585567132325,
+    0.9734984331334061,
+    0.9265863599767572,
+    0.7928337585983407
    ]
   }
  },
@@ -60,46 +64,74 @@
     "rejection_dB_median": 35.49479237321882
    },
    "as built, gain 8": {
-    "median_fraction_of_signal_kept": 0.8703679732962177,
-    "weakest_over_strongest_channel_median": 0.5539491734820777,
-    "hum_uV_per_mV_common_mode_median": 32.47274486087069,
-    "hum_uV_per_mV_common_mode_95th": 74.45453606083542,
-    "rejection_dB_median": 29.769619994313206
+    "median_fraction_of_signal_kept": 0.9629578455110002,
+    "weakest_over_strongest_channel_median": 0.8242258590556142,
+    "hum_uV_per_mV_common_mode_median": 49.768844170189006,
+    "hum_uV_per_mV_common_mode_95th": 76.1459173678542,
+    "rejection_dB_median": 26.060848903559464
    },
-   "gain 8, hold resistor 100M instead of 10M": {
-    "median_fraction_of_signal_kept": 0.8701939868961199,
-    "weakest_over_strongest_channel_median": 0.5541217887923292,
-    "hum_uV_per_mV_common_mode_median": 30.778261527535122,
-    "hum_uV_per_mV_common_mode_95th": 34.074438636164835,
-    "rejection_dB_median": 30.2351182880901
+   "gain 4, hold resistor 100M instead of 10M": {
+    "median_fraction_of_signal_kept": 0.6911418643888616,
+    "weakest_over_strongest_channel_median": 0.3048573057766848,
+    "hum_uV_per_mV_common_mode_median": 15.956839257566525,
+    "hum_uV_per_mV_common_mode_95th": 17.04500426905984,
+    "rejection_dB_median": 35.94106259672411
    },
-   "gain 8, filter capacitors 47 pF instead of 220 pF": {
-    "median_fraction_of_signal_kept": 0.8702659680522182,
-    "weakest_over_strongest_channel_median": 0.5544143432049933,
-    "hum_uV_per_mV_common_mode_median": 14.175328455182596,
-    "hum_uV_per_mV_common_mode_95th": 74.58250881132949,
-    "rejection_dB_median": 36.96933738644966
+   "gain 4, filter capacitors 47 pF instead of 220 pF": {
+    "median_fraction_of_signal_kept": 0.6912734945516069,
+    "weakest_over_strongest_channel_median": 0.3048770290297097,
+    "hum_uV_per_mV_common_mode_median": 13.378969264174891,
+    "hum_uV_per_mV_common_mode_95th": 70.40058856265235,
+    "rejection_dB_median": 37.47154687953169
    },
-   "gain 8, filter capacitors returned to REFN, not GND": {
-    "median_fraction_of_signal_kept": 0.870424566582911,
-    "weakest_over_strongest_channel_median": 0.5541260736396285,
-    "hum_uV_per_mV_common_mode_median": 14.247590191725925,
-    "hum_uV_per_mV_common_mode_95th": 74.53709773207504,
-    "rejection_dB_median": 36.925171702496
+   "gain 4, filter capacitors returned to REFN, not GND": {
+    "median_fraction_of_signal_kept": 0.6916306342356533,
+    "weakest_over_strongest_channel_median": 0.3048668940468978,
+    "hum_uV_per_mV_common_mode_median": 13.437253366863336,
+    "hum_uV_per_mV_common_mode_95th": 70.30957258842336,
+    "rejection_dB_median": 37.43378987790337
    },
-   "gain 8, both: caps to REFN and 100M hold": {
-    "median_fraction_of_signal_kept": 0.8701825067393503,
-    "weakest_over_strongest_channel_median": 0.553976124600727,
-    "hum_uV_per_mV_common_mode_median": 4.171864504039245,
-    "hum_uV_per_mV_common_mode_95th": 9.163744736662906,
-    "rejection_dB_median": 47.59339610511947
+   "gain 4, both changes (caps to REFN, 100M hold)": {
+    "median_fraction_of_signal_kept": 0.6910697557419425,
+    "weakest_over_strongest_channel_median": 0.3047427108645736,
+    "hum_uV_per_mV_common_mode_median": 2.273442787145257,
+    "hum_uV_per_mV_common_mode_95th": 8.640697773226862,
+    "rejection_dB_median": 52.866319413208736
    },
-   "gain 8, reference not buffered (R19 option)": {
-    "median_fraction_of_signal_kept": 0.8701010571033803,
-    "weakest_over_strongest_channel_median": 0.5538176647288644,
-    "hum_uV_per_mV_common_mode_median": 24.364724676154186,
-    "hum_uV_per_mV_common_mode_95th": 30.227066859599923,
-    "rejection_dB_median": 32.26476983652798
+   "gain 4, reference not buffered (R19 option)": {
+    "median_fraction_of_signal_kept": 0.690975541694675,
+    "weakest_over_strongest_channel_median": 0.30460472664014865,
+    "hum_uV_per_mV_common_mode_median": 13.346661059811254,
+    "hum_uV_per_mV_common_mode_95th": 15.174128396427076,
+    "rejection_dB_median": 37.49254736713905
+   },
+   "as built, gain 4, if input-to-ground is 10M": {
+    "median_fraction_of_signal_kept": 0.6848499252095759,
+    "weakest_over_strongest_channel_median": 0.29916709894780413,
+    "hum_uV_per_mV_common_mode_median": 26.621770857696276,
+    "hum_uV_per_mV_common_mode_95th": 67.54039304605969,
+    "rejection_dB_median": 31.495261179972104
+   },
+   "as built, gain 4, if input-to-ground is 1M": {
+    "median_fraction_of_signal_kept": 0.6282985481542951,
+    "weakest_over_strongest_channel_median": 0.25384272168799693,
+    "hum_uV_per_mV_common_mode_median": 182.32955726447753,
+    "hum_uV_per_mV_common_mode_95th": 195.79416096107948,
+    "rejection_dB_median": 14.782858451766547
+   },
+   "both changes, if input-to-ground is 10M": {
+    "median_fraction_of_signal_kept": 0.685330968201792,
+    "weakest_over_strongest_channel_median": 0.29915991304974243,
+    "hum_uV_per_mV_common_mode_median": 22.405104323858172,
+    "hum_uV_per_mV_common_mode_95th": 23.890751566391444,
+    "rejection_dB_median": 32.99306059121563
+   },
+   "both changes, if input-to-ground is 1M": {
+    "median_fraction_of_signal_kept": 0.6280135572693306,
+    "weakest_over_strongest_channel_median": 0.25381602408340853,
+    "hum_uV_per_mV_common_mode_median": 191.0051568031147,
+    "hum_uV_per_mV_common_mode_95th": 197.79334582264082,
+    "rejection_dB_median": 14.379098148144458
    }
   }
  },
@@ -138,45 +170,45 @@
     "contacts_thermal_uV": 0.9267322754981613,
     "buffer_uV": 0.14738937658034235,
     "total_at_converter_uV": 1.3353113265372767,
-    "fraction_kept": 0.8286718350976597,
-    "referred_to_scalp_uV_rms": 1.6113873670871282,
-    "in_8_12Hz_band_uV_rms": 0.28825373527129805
+    "fraction_kept": 0.9494640172271204,
+    "referred_to_scalp_uV_rms": 1.4063843413855863,
+    "in_8_12Hz_band_uV_rms": 0.2515816791863553
    },
    "16": {
     "converter_uV": 0.64,
     "contacts_thermal_uV": 0.9267322754981613,
     "buffer_uV": 0.14738937658034235,
     "total_at_converter_uV": 1.135850491384646,
-    "fraction_kept": 0.8286718350976597,
-    "referred_to_scalp_uV_rms": 1.3706879409637291,
-    "in_8_12Hz_band_uV_rms": 0.24519611295472937
+    "fraction_kept": 0.905468520696453,
+    "referred_to_scalp_uV_rms": 1.2544339923722492,
+    "in_8_12Hz_band_uV_rms": 0.22439997441846415
    },
    "32": {
     "converter_uV": 0.42,
     "contacts_thermal_uV": 0.9267322754981613,
     "buffer_uV": 0.14738937658034235,
     "total_at_converter_uV": 1.028083818946073,
-    "fraction_kept": 0.8286718350976597,
-    "referred_to_scalp_uV_rms": 1.2406404747965307,
-    "in_8_12Hz_band_uV_rms": 0.22193251498261257
+    "fraction_kept": 0.8962397998609155,
+    "referred_to_scalp_uV_rms": 1.1471079716674242,
+    "in_8_12Hz_band_uV_rms": 0.20520091217442105
    },
    "64": {
     "converter_uV": 0.42,
     "contacts_thermal_uV": 0.9267322754981613,
     "buffer_uV": 0.14738937658034235,
     "total_at_converter_uV": 1.028083818946073,
-    "fraction_kept": 0.8286718350976597,
-    "referred_to_scalp_uV_rms": 1.2406404747965307,
-    "in_8_12Hz_band_uV_rms": 0.22193251498261257
+    "fraction_kept": 0.8962397998609155,
+    "referred_to_scalp_uV_rms": 1.1471079716674242,
+    "in_8_12Hz_band_uV_rms": 0.20520091217442105
    },
    "128": {
     "converter_uV": 0.42,
     "contacts_thermal_uV": 0.9267322754981613,
     "buffer_uV": 0.14738937658034235,
     "total_at_converter_uV": 1.028083818946073,
-    "fraction_kept": 0.8286718350976597,
-    "referred_to_scalp_uV_rms": 1.2406404747965307,
-    "in_8_12Hz_band_uV_rms": 0.22193251498261257
+    "fraction_kept": 0.8962397998609155,
+    "referred_to_scalp_uV_rms": 1.1471079716674242,
+    "in_8_12Hz_band_uV_rms": 0.20520091217442105
    }
   }
  },
@@ -201,33 +233,43 @@
     "chance_any_channel_clips_sigma_100mV": 1.812405816248308e-05
    },
    "8": {
-    "offset_limit_mV": 181.01205000049757,
-    "chance_any_channel_clips_sigma_25mV": 7.153388992264809e-12,
-    "chance_any_channel_clips_sigma_50mV": 0.004698878617655611,
-    "chance_any_channel_clips_sigma_100mV": 0.6883576777481549
+    "offset_limit_mV": 157.98330000057013,
+    "contact_limit_kOhm_typical_current": 652.1739130434783,
+    "contact_limit_kOhm_worst_current": 136.36363636363635,
+    "chance_any_channel_clips_sigma_25mV": 4.203140946401618e-09,
+    "chance_any_channel_clips_sigma_50mV": 0.024974831647581075,
+    "chance_any_channel_clips_sigma_100mV": 0.8561859417364797
    },
    "16": {
-    "offset_limit_mV": 90.50602500024878,
-    "chance_any_channel_clips_sigma_25mV": 0.004698878617655611,
-    "chance_any_channel_clips_sigma_50mV": 0.6883576777481549,
-    "chance_any_channel_clips_sigma_100mV": 0.9993087508731312
+    "offset_limit_mV": 82.82977500027187,
+    "contact_limit_kOhm_typical_current": 384.6153846153846,
+    "contact_limit_kOhm_worst_current": 68.18181818181817,
+    "chance_any_channel_clips_sigma_25mV": 0.01465641863392797,
+    "chance_any_channel_clips_sigma_50mV": 0.8066360502439517,
+    "chance_any_channel_clips_sigma_100mV": 0.9997693298330333
    },
    "32": {
-    "offset_limit_mV": 45.25301250012439,
-    "chance_any_channel_clips_sigma_25mV": 0.6883576777481549,
-    "chance_any_channel_clips_sigma_50mV": 0.9993087508731312,
-    "chance_any_channel_clips_sigma_100mV": 0.9999999513084201
+    "offset_limit_mV": 41.841345833467884,
+    "contact_limit_kOhm_typical_current": 234.375,
+    "contact_limit_kOhm_worst_current": 34.090909090909086,
+    "chance_any_channel_clips_sigma_25mV": 0.7946345396653779,
+    "chance_any_channel_clips_sigma_50mV": 0.9997374583933576,
+    "chance_any_channel_clips_sigma_100mV": 0.9999999849916551
    },
    "64": {
-    "offset_limit_mV": 22.626506250062196,
-    "chance_any_channel_clips_sigma_25mV": 0.9993087508731312,
-    "chance_any_channel_clips_sigma_50mV": 0.9999999513084201,
-    "chance_any_channel_clips_sigma_100mV": 0.9999999999988887
+    "offset_limit_mV": 20.920672916733942,
+    "contact_limit_kOhm_typical_current": 117.1875,
+    "contact_limit_kOhm_worst_current": 17.045454545454543,
+    "chance_any_channel_clips_sigma_25mV": 0.9997374583933576,
+    "chance_any_channel_clips_sigma_50mV": 0.9999999849916551,
+    "chance_any_channel_clips_sigma_100mV": 0.9999999999996766
    },
    "128": {
-    "offset_limit_mV": 11.313253125031098,
-    "chance_any_channel_clips_sigma_25mV": 0.9999999513084201,
-    "chance_any_channel_clips_sigma_50mV": 0.9999999999988887,
+    "offset_limit_mV": 10.460336458366971,
+    "contact_limit_kOhm_typical_current": 58.59375,
+    "contact_limit_kOhm_worst_current": 8.522727272727272,
+    "chance_any_channel_clips_sigma_25mV": 0.9999999849916551,
+    "chance_any_channel_clips_sigma_50mV": 0.9999999999996766,
     "chance_any_channel_clips_sigma_100mV": 1.0
    }
   },
@@ -351,6 +393,7 @@
   },
   "packets_lost": 0,
   "gain": 4,
+  "channels_saturated_by_input_current": [],
   "channels_with_alpha_3x_above_baseline": 10,
   "best_closed_over_open": 14.814295309420263,
   "largest_true_difference_uV": 7.18602030054287,
@@ -478,6 +521,7 @@
   },
   "packets_lost": 0,
   "gain": 4,
+  "channels_saturated_by_input_current": [],
   "channels_with_alpha_3x_above_baseline": 0,
   "best_closed_over_open": 2.11628113565055,
   "largest_true_difference_uV": 1.5541920494495336,
@@ -492,121 +536,125 @@
   "per_channel": {
    "CH1": {
     "true_pin_minus_ref_uV_peak": 0.2445995196587009,
-    "alpha_band_uV_rms_eyes_closed": 0.3250820926217183,
-    "alpha_band_uV_rms_eyes_open": 0.27602807774660776,
-    "closed_over_open": 1.1777138589507616,
-    "mains_uV_rms": 26.464098866327642
+    "alpha_band_uV_rms_eyes_closed": 0.0,
+    "alpha_band_uV_rms_eyes_open": 0.0,
+    "closed_over_open": 0.0,
+    "mains_uV_rms": 0.0
    },
    "CH2": {
     "true_pin_minus_ref_uV_peak": 0.9978963306822235,
-    "alpha_band_uV_rms_eyes_closed": 0.7053113634461928,
-    "alpha_band_uV_rms_eyes_open": 0.22561084199027945,
-    "closed_over_open": 3.1262299153007085,
-    "mains_uV_rms": 20.529705366685484
+    "alpha_band_uV_rms_eyes_closed": 0.8478512134666985,
+    "alpha_band_uV_rms_eyes_open": 0.22579237213294412,
+    "closed_over_open": 3.7550037915695964,
+    "mains_uV_rms": 25.195972871921075
    },
    "CH3": {
     "true_pin_minus_ref_uV_peak": -1.3866738420540325,
-    "alpha_band_uV_rms_eyes_closed": 0.7402133998690856,
-    "alpha_band_uV_rms_eyes_open": 0.22831276596805505,
-    "closed_over_open": 3.2421025461741126,
-    "mains_uV_rms": 19.42042385938596
+    "alpha_band_uV_rms_eyes_closed": 0.8445556113715956,
+    "alpha_band_uV_rms_eyes_open": 0.22842141643041852,
+    "closed_over_open": 3.697357386928135,
+    "mains_uV_rms": 22.410287481813043
    },
    "CH4": {
     "true_pin_minus_ref_uV_peak": -2.158558727370238,
-    "alpha_band_uV_rms_eyes_closed": 1.242289331728065,
-    "alpha_band_uV_rms_eyes_open": 0.22103811514297647,
-    "closed_over_open": 5.620249389678796,
-    "mains_uV_rms": 19.342635635326005
+    "alpha_band_uV_rms_eyes_closed": 1.3803212659378206,
+    "alpha_band_uV_rms_eyes_open": 0.22115972266306744,
+    "closed_over_open": 6.241286837028247,
+    "mains_uV_rms": 21.553227046663086
    },
    "CH5": {
     "true_pin_minus_ref_uV_peak": -2.083641394813065,
-    "alpha_band_uV_rms_eyes_closed": 1.3161562259823476,
-    "alpha_band_uV_rms_eyes_open": 0.1788489551999257,
-    "closed_over_open": 7.359037823347007,
-    "mains_uV_rms": 20.673481413315617
+    "alpha_band_uV_rms_eyes_closed": 1.3654551523597986,
+    "alpha_band_uV_rms_eyes_open": 0.17892148394384966,
+    "closed_over_open": 7.6315885731660655,
+    "mains_uV_rms": 21.468545744127756
    },
    "CH6": {
     "true_pin_minus_ref_uV_peak": -1.1585745295878616,
-    "alpha_band_uV_rms_eyes_closed": 0.6732741484449354,
-    "alpha_band_uV_rms_eyes_open": 0.22214774691039813,
-    "closed_over_open": 3.0307493900286833,
-    "mains_uV_rms": 20.484045817618306
+    "alpha_band_uV_rms_eyes_closed": 0.701203807218596,
+    "alpha_band_uV_rms_eyes_open": 0.22232384043257483,
+    "closed_over_open": 3.153974876712573,
+    "mains_uV_rms": 21.407368051367122
    },
    "CH7": {
     "true_pin_minus_ref_uV_peak": 0.620510098026614,
-    "alpha_band_uV_rms_eyes_closed": 0.617041391600069,
-    "alpha_band_uV_rms_eyes_open": 0.16231552379204506,
-    "closed_over_open": 3.801493394991648,
-    "mains_uV_rms": 21.26658150684506
+    "alpha_band_uV_rms_eyes_closed": 0.6290836820638452,
+    "alpha_band_uV_rms_eyes_open": 0.16259408323842212,
+    "closed_over_open": 3.8690441222352447,
+    "mains_uV_rms": 21.719563631367425
    },
    "CH8": {
     "true_pin_minus_ref_uV_peak": 1.183899438030432,
-    "alpha_band_uV_rms_eyes_closed": 0.9923800597946763,
-    "alpha_band_uV_rms_eyes_open": 0.15832854746266403,
-    "closed_over_open": 6.267852991127153,
-    "mains_uV_rms": 20.475722841670994
+    "alpha_band_uV_rms_eyes_closed": 1.0347078456915049,
+    "alpha_band_uV_rms_eyes_open": 0.15834630692969434,
+    "closed_over_open": 6.534461496161792,
+    "mains_uV_rms": 21.388833434542445
    },
    "CH9": {
     "true_pin_minus_ref_uV_peak": 2.609506761349109,
-    "alpha_band_uV_rms_eyes_closed": 1.2379837891180319,
-    "alpha_band_uV_rms_eyes_open": 0.25282918293879303,
-    "closed_over_open": 4.896522524528876,
-    "mains_uV_rms": 27.17311973570188
+    "alpha_band_uV_rms_eyes_closed": 1.7582297936627835,
+    "alpha_band_uV_rms_eyes_open": 0.25311837321814945,
+    "closed_over_open": 6.946274864635992,
+    "mains_uV_rms": 39.46886007767524
    },
    "CH10": {
     "true_pin_minus_ref_uV_peak": 3.545048712386029,
-    "alpha_band_uV_rms_eyes_closed": 2.6507376360733326,
-    "alpha_band_uV_rms_eyes_open": 0.15572266087932315,
-    "closed_over_open": 17.022170190936528,
-    "mains_uV_rms": 21.03106693005255
+    "alpha_band_uV_rms_eyes_closed": 2.7241219596452644,
+    "alpha_band_uV_rms_eyes_open": 0.15591632748308365,
+    "closed_over_open": 17.47169141051518,
+    "mains_uV_rms": 21.617227256197566
    },
    "CH11": {
     "true_pin_minus_ref_uV_peak": 5.189355115014135,
-    "alpha_band_uV_rms_eyes_closed": 2.998144625394875,
-    "alpha_band_uV_rms_eyes_open": 0.23387415781313758,
-    "closed_over_open": 12.819478019415696,
-    "mains_uV_rms": 20.185869982018446
+    "alpha_band_uV_rms_eyes_closed": 3.6309201452023445,
+    "alpha_band_uV_rms_eyes_open": 0.23374601651952198,
+    "closed_over_open": 15.533612932818034,
+    "mains_uV_rms": 24.45673696717885
    },
    "CH12": {
     "true_pin_minus_ref_uV_peak": 7.0178486355632455,
-    "alpha_band_uV_rms_eyes_closed": 5.03635599892288,
-    "alpha_band_uV_rms_eyes_open": 0.1966341034729847,
-    "closed_over_open": 25.612830683843292,
-    "mains_uV_rms": 20.930528286351738
+    "alpha_band_uV_rms_eyes_closed": 5.19023136087614,
+    "alpha_band_uV_rms_eyes_open": 0.19654025824708862,
+    "closed_over_open": 26.407980772829905,
+    "mains_uV_rms": 21.566678934921235
    },
    "CH13": {
     "true_pin_minus_ref_uV_peak": 7.18602030054287,
-    "alpha_band_uV_rms_eyes_closed": 4.439325357493543,
-    "alpha_band_uV_rms_eyes_open": 0.20861450500308168,
-    "closed_over_open": 21.28004166070794,
-    "mains_uV_rms": 19.455073778389163
+    "alpha_band_uV_rms_eyes_closed": 5.132308602671428,
+    "alpha_band_uV_rms_eyes_open": 0.20864928571695532,
+    "closed_over_open": 24.597777006692937,
+    "mains_uV_rms": 22.52694353250932
    },
    "CH14": {
     "true_pin_minus_ref_uV_peak": 5.601639946252156,
-    "alpha_band_uV_rms_eyes_closed": 3.7781842283154474,
-    "alpha_band_uV_rms_eyes_open": 0.2250077964159834,
-    "closed_over_open": 16.791348071026505,
-    "mains_uV_rms": 19.59752753110167
+    "alpha_band_uV_rms_eyes_closed": 0.0,
+    "alpha_band_uV_rms_eyes_open": 0.0,
+    "closed_over_open": 0.0,
+    "mains_uV_rms": 0.0
    },
    "CH15": {
     "true_pin_minus_ref_uV_peak": 3.0763614071611602,
-    "alpha_band_uV_rms_eyes_closed": 2.1536668386548157,
-    "alpha_band_uV_rms_eyes_open": 0.17905627495390694,
-    "closed_over_open": 12.027876929804428,
-    "mains_uV_rms": 19.73053760158237
+    "alpha_band_uV_rms_eyes_closed": 0.0,
+    "alpha_band_uV_rms_eyes_open": 0.0,
+    "closed_over_open": 0.0,
+    "mains_uV_rms": 0.0
    },
    "CH16": {
     "true_pin_minus_ref_uV_peak": 3.7760515619945836,
-    "alpha_band_uV_rms_eyes_closed": 2.7367622178632875,
-    "alpha_band_uV_rms_eyes_open": 0.20222613481216486,
-    "closed_over_open": 13.533177699337891,
-    "mains_uV_rms": 20.524161047808548
+    "alpha_band_uV_rms_eyes_closed": 2.8546351120608042,
+    "alpha_band_uV_rms_eyes_open": 0.202211850722186,
+    "closed_over_open": 14.117051507444629,
+    "mains_uV_rms": 21.407644646251807
    }
   },
   "packets_lost": 0,
   "gain": 8,
-  "channels_with_alpha_3x_above_baseline": 15,
-  "best_closed_over_open": 25.612830683843292,
+  "channels_saturated_by_input_current": [
+   "CH1",
+   "CH9"
+  ],
+  "channels_with_alpha_3x_above_baseline": 13,
+  "best_closed_over_open": 26.407980772829905,
   "largest_true_difference_uV": 7.18602030054287,
   "scenario": {
    "alpha_uv_at_peak_vs_far_reference": 20.0,
@@ -722,5 +770,5 @@
    }
   }
  },
- "seconds": 64.4
+ "seconds": 65.5
 }

@@ -31,5 +31,7 @@ simulated converter is written from the datasheet, not checked against a chip.
 
 ## GPU
 
-The Monte Carlo uses CUDA through PyTorch automatically when a CUDA device is
-visible. It does not need one: 200,000 trials take a few seconds on a CPU.
+The Monte Carlo is written to use CUDA through PyTorch when a CUDA device is
+visible, but that path has never run: no GPU was visible on the machine this
+was written on. It does not need one: 200,000 trials take a few seconds on a
+CPU.

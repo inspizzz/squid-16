@@ -37,7 +37,7 @@ def plots(r):
     fig, ax = plt.subplots(figsize=(7.2, 4.2), facecolor=SURFACE)
     for gain, col in ((4, BLUE), (8, ORANGE)):
         ax.plot(z / 1e3, np.abs(m.front_end(10.0, z, 100e3, gain)[0]) * 100, color=col, linewidth=2,
-                label=f"gain {gain} (converter input {m.adc_zin_diff(gain) / 1e3:.0f} kOhm)")
+                label=f"gain {gain} (converter input about {m.adc_zin_diff(gain) / 1e6:.2g} MOhm)")
     ax.set_xscale("log"); ax.set_ylim(0, 100)
     style(ax, "Signal reaching the converter, by contact impedance", "pin contact impedance (kOhm)", "% of scalp signal kept")
     ax.legend(frameon=False, fontsize=9, labelcolor=INK)
@@ -55,7 +55,7 @@ def plots(r):
     names = list(r["monte_carlo"]["cases"])
     med = [r["monte_carlo"]["cases"][n]["hum_uV_per_mV_common_mode_median"] for n in names]
     p95 = [r["monte_carlo"]["cases"][n]["hum_uV_per_mV_common_mode_95th"] for n in names]
-    fig, ax = plt.subplots(figsize=(8.2, 5.0), facecolor=SURFACE)
+    fig, ax = plt.subplots(figsize=(8.6, 6.6), facecolor=SURFACE)
     y = np.arange(len(names))[::-1]
     ax.barh(y + 0.19, med, height=0.34, color=BLUE, label="median")
     ax.barh(y - 0.19, p95, height=0.34, color=ORANGE, label="95th percentile")
@@ -81,8 +81,8 @@ def report(r):
     w(f"- Module pins the copper connects to the converters match the firmware's pin numbers: "
       f"**{'all 9 checks pass' if x['gpio_all_ok'] else 'MISMATCH ' + str(x['gpio_checks'])}**.")
     w(f"- A different test tone on each of the 16 pins, through the firmware driver, packet code and the "
-      f"recorder's decoder: **{16 - len(x['channels_in_wrong_place'])} of 16 channels come out where the "
-      f"silkscreen says**, amplitude error {x['max_amplitude_error_percent']:.3f} %, "
+      f"recorder's decoder: **{16 - len(x['channels_in_wrong_place'])} of 16 channels come out under the "
+      f"channel name the board gives that pin** (the footprint's label, which the silkscreen numbers and the docs are generated from), amplitude error {x['max_amplitude_error_percent']:.3f} %, "
       f"{x['packets_lost_or_misframed']} of {x['packets']} packets lost.")
     w("- Not covered: `main.cpp` (interrupts, Bluetooth, timing). The simulated converter is my reading of the datasheet.\n")
     x = r["retention"]
@@ -105,6 +105,7 @@ def report(r):
     w(f"\nRan on: {x['device']}.\n\n![mains pickup](mains_pickup.png)\n")
     x = r["noise"]
     w(f"## 4. Noise floor [datasheet; contacts assumed {x['contact_ohm_assumed'] / 1e3:.0f} kOhm]\n")
+    w("The last column assumes the noise is spread evenly over frequency, which flatters it: real low-frequency noise is higher.\n")
     w("| Gain | Converter | Contacts (thermal) | Buffer | Referred to the scalp, 0-125 Hz | In the 8-12 Hz band |")
     w("|---|---|---|---|---|---|")
     for g, n in x["by_gain"].items():
@@ -113,24 +114,30 @@ def report(r):
     w("")
     x = r["offsets"]
     w("## 5. Room for electrode DC offsets [datasheet range; offset spread assumed]\n")
-    w("| Gain | Largest offset that fits | Chance a channel clips, 25 mV rms spread | 50 mV | 100 mV |")
-    w("|---|---|---|---|---|")
+    w("At gain 8 and above the converter's inputs draw a DC current. Through a dry contact that becomes a DC error "
+      "of its own. The last two columns give the contact impedance at which that error alone fills the whole range: "
+      "with the typical current from the datasheet graph, and with the table's worst-case figure as I interpret it.\n")
+    w("| Gain | Largest offset that fits | Chance a channel clips, 25 mV rms spread | 50 mV | 100 mV | Contact limit, typical current | Contact limit, worst current |")
+    w("|---|---|---|---|---|---|---|")
     for g, o in x["by_gain"].items():
+        lim = (f"{o['contact_limit_kOhm_typical_current']:.0f} kOhm | {o['contact_limit_kOhm_worst_current']:.0f} kOhm"
+               if "contact_limit_kOhm_typical_current" in o else "no such current | no such current")
         w(f"| {g} | {o['offset_limit_mV']:.0f} mV | {o['chance_any_channel_clips_sigma_25mV'] * 100:.0f} % | "
-          f"{o['chance_any_channel_clips_sigma_50mV'] * 100:.0f} % | {o['chance_any_channel_clips_sigma_100mV'] * 100:.0f} % |")
+          f"{o['chance_any_channel_clips_sigma_50mV'] * 100:.0f} % | {o['chance_any_channel_clips_sigma_100mV'] * 100:.0f} % | {lim} |")
     w("")
     w("## 6. A simulated recording, eyes open then closed [source shape assumed]\n")
     sc = r["recording"]["scenario"]
     w(f"Alpha source: {sc['alpha_uv_at_peak_vs_far_reference']:.0f} uV at its peak against a distant reference, a smooth bump "
       f"{sc['bump_sigma_mm']:.0f} mm wide (sigma); mains {sc['mains_common_mode_mV_rms']:.0f} mV rms on the body; random contacts and offsets. "
       "No background brain activity is modelled, so the eyes-open baseline is only electronics noise and these counts are optimistic.\n")
-    w("| Scenario | Largest real pin-to-reference difference | Channels showing alpha at 3x baseline | Best closed/open ratio |")
-    w("|---|---|---|---|")
+    w("| Scenario | Largest real pin-to-reference difference | Channels showing alpha at 3x baseline | Channels saturated by input current | Best closed/open ratio |")
+    w("|---|---|---|---|---|")
     for key, name in (("recording", f"board {sc['peak_offset_from_board_mm']:.0f} mm off the peak, gain 4"),
                       ("recording_gain8", f"board {sc['peak_offset_from_board_mm']:.0f} mm off the peak, gain 8"),
                       ("recording_on_peak", "board centred on the peak, gain 4")):
         y = r[key]
-        w(f"| {name} | {y['largest_true_difference_uV']:.1f} uV | {y['channels_with_alpha_3x_above_baseline']} of 16 | {y['best_closed_over_open']:.1f} |")
+        w(f"| {name} | {y['largest_true_difference_uV']:.1f} uV | {y['channels_with_alpha_3x_above_baseline']} of 16 | "
+          f"{len(y['channels_saturated_by_input_current'])} | {y['best_closed_over_open']:.1f} |")
     hum = [c["mains_uV_rms"] for c in r["recording"]["per_channel"].values()]
     w(f"\nMains line in that recording: {min(hum):.0f}-{max(hum):.0f} uV rms per channel for the assumed 1 mV.\n\n![spectrum](recording_spectrum.png)\n")
     x = r["ble"]

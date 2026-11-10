@@ -158,18 +158,24 @@ characteristic is different and uses its own UUID.
 them is a measurement. In short:
 
 - The wiring, firmware and recorder agree: all 16 channels come out in the
-  right place at the right scale.
+  right place at the right scale. This is the one result that does not rest
+  on assumptions.
 - With dry contacts of 20 kOhm to 1 MOhm, gain 4 keeps about 70 % of the
-  signal and the weakest channel gets about a third of the strongest; gain 8
-  keeps about 87 % and roughly halves the noise.
-- Two parts limit mains rejection to roughly 30-35 dB: the 220 pF input
-  capacitors return to ground rather than to the driven reference node, and
-  the 10 MOhm hold resistor (R28) loads the reference pin. Changing both
-  (capacitors to REFN, 100 MOhm hold) improves the simulated figure about
-  eightfold. This is a candidate for the next revision; it has not been
-  applied to the board.
+  signal and the weakest channel gets about a third of the strongest.
+- Gain 8 keeps about 96 % and halves the noise, but at gain 8 and above the
+  converter's inputs draw a DC current. Through a dry contact that is a DC
+  error: it fills the whole input range at about 650 kOhm with the typical
+  current, or about 140 kOhm on a worst-case reading of the datasheet. Gain 8
+  may therefore saturate channels with poor contact. This needs measuring.
+- Mains rejection as built is about 35 dB in the model. Returning the 220 pF
+  input capacitors to the reference node instead of ground and raising R28
+  from 10 MOhm to 100 MOhm improves that about sevenfold, but only if the
+  converter's input-to-ground impedance is around 100 MOhm or more. That
+  figure is not in the datasheet; at 10 MOhm the changes gain nothing, and at
+  1 MOhm rejection is about 15 dB whatever is done. So this is not yet a
+  reason to change the board.
 - Because the reference pin sits inside the cluster, each channel sees only
-  the difference in scalp potential over 6 to 13 mm, a few microvolts for a
+  the difference in scalp potential over 6.5 to 19 mm: a few microvolts for a
   typical alpha rhythm, and almost nothing when the board sits right on the
   peak of the source.
 - The reference buffer is estimated stable as built (about 70 degrees of

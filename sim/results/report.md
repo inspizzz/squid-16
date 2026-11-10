@@ -6,7 +6,7 @@ Tags: **[board]** read from the PCB file, **[datasheet]** typical datasheet figu
 ## 1. Wiring and data path [board + real firmware code]
 
 - Module pins the copper connects to the converters match the firmware's pin numbers: **all 9 checks pass**.
-- A different test tone on each of the 16 pins, through the firmware driver, packet code and the recorder's decoder: **16 of 16 channels come out where the silkscreen says**, amplitude error 0.003 %, 0 of 2500 packets lost.
+- A different test tone on each of the 16 pins, through the firmware driver, packet code and the recorder's decoder: **16 of 16 channels come out under the channel name the board gives that pin** (the footprint's label, which the silkscreen numbers and the docs are generated from), amplitude error 0.003 %, 0 of 2500 packets lost.
 - Not covered: `main.cpp` (interrupts, Bluetooth, timing). The simulated converter is my reading of the datasheet.
 
 ## 2. Signal that reaches the converter [datasheet input impedance]
@@ -14,7 +14,7 @@ Tags: **[board]** read from the PCB file, **[datasheet]** typical datasheet figu
 | Contact impedance | 10 kOhm | 30 kOhm | 100 kOhm | 300 kOhm | 1000 kOhm |
 |---|---|---|---|---|---|
 | Gain 4 | 96 % | 90 % | 76 % | 52 % | 25 % |
-| Gain 8 | 99 % | 97 % | 90 % | 76 % | 50 % |
+| Gain 8 | 100 % | 99 % | 97 % | 93 % | 79 % |
 
 ![signal kept](signal_kept.png)
 
@@ -25,12 +25,16 @@ Hum is the false signal on the worst of the 16 channels per millivolt of mains v
 | Case | Signal kept (median) | Weakest / strongest channel | Hum, median | Hum, 95th pct |
 |---|---|---|---|---|
 | as built, gain 4 | 69 % | 0.30 | 16.8 uV/mV | 70.2 uV/mV |
-| as built, gain 8 | 87 % | 0.55 | 32.5 uV/mV | 74.5 uV/mV |
-| gain 8, hold resistor 100M instead of 10M | 87 % | 0.55 | 30.8 uV/mV | 34.1 uV/mV |
-| gain 8, filter capacitors 47 pF instead of 220 pF | 87 % | 0.55 | 14.2 uV/mV | 74.6 uV/mV |
-| gain 8, filter capacitors returned to REFN, not GND | 87 % | 0.55 | 14.2 uV/mV | 74.5 uV/mV |
-| gain 8, both: caps to REFN and 100M hold | 87 % | 0.55 | 4.2 uV/mV | 9.2 uV/mV |
-| gain 8, reference not buffered (R19 option) | 87 % | 0.55 | 24.4 uV/mV | 30.2 uV/mV |
+| as built, gain 8 | 96 % | 0.82 | 49.8 uV/mV | 76.1 uV/mV |
+| gain 4, hold resistor 100M instead of 10M | 69 % | 0.30 | 16.0 uV/mV | 17.0 uV/mV |
+| gain 4, filter capacitors 47 pF instead of 220 pF | 69 % | 0.30 | 13.4 uV/mV | 70.4 uV/mV |
+| gain 4, filter capacitors returned to REFN, not GND | 69 % | 0.30 | 13.4 uV/mV | 70.3 uV/mV |
+| gain 4, both changes (caps to REFN, 100M hold) | 69 % | 0.30 | 2.3 uV/mV | 8.6 uV/mV |
+| gain 4, reference not buffered (R19 option) | 69 % | 0.30 | 13.3 uV/mV | 15.2 uV/mV |
+| as built, gain 4, if input-to-ground is 10M | 68 % | 0.30 | 26.6 uV/mV | 67.5 uV/mV |
+| as built, gain 4, if input-to-ground is 1M | 63 % | 0.25 | 182.3 uV/mV | 195.8 uV/mV |
+| both changes, if input-to-ground is 10M | 69 % | 0.30 | 22.4 uV/mV | 23.9 uV/mV |
+| both changes, if input-to-ground is 1M | 63 % | 0.25 | 191.0 uV/mV | 197.8 uV/mV |
 
 Ran on: cpu (numpy); no CUDA device visible.
 
@@ -38,39 +42,43 @@ Ran on: cpu (numpy); no CUDA device visible.
 
 ## 4. Noise floor [datasheet; contacts assumed 200 kOhm]
 
+The last column assumes the noise is spread evenly over frequency, which flatters it: real low-frequency noise is higher.
+
 | Gain | Converter | Contacts (thermal) | Buffer | Referred to the scalp, 0-125 Hz | In the 8-12 Hz band |
 |---|---|---|---|---|---|
 | 1 | 1.90 | 0.93 | 0.15 | 3.44 uV rms | 0.61 uV rms |
 | 2 | 1.69 | 0.93 | 0.15 | 3.14 uV rms | 0.56 uV rms |
 | 4 | 1.56 | 0.93 | 0.15 | 2.95 uV rms | 0.53 uV rms |
-| 8 | 0.95 | 0.93 | 0.15 | 1.61 uV rms | 0.29 uV rms |
-| 16 | 0.64 | 0.93 | 0.15 | 1.37 uV rms | 0.25 uV rms |
-| 32 | 0.42 | 0.93 | 0.15 | 1.24 uV rms | 0.22 uV rms |
-| 64 | 0.42 | 0.93 | 0.15 | 1.24 uV rms | 0.22 uV rms |
-| 128 | 0.42 | 0.93 | 0.15 | 1.24 uV rms | 0.22 uV rms |
+| 8 | 0.95 | 0.93 | 0.15 | 1.41 uV rms | 0.25 uV rms |
+| 16 | 0.64 | 0.93 | 0.15 | 1.25 uV rms | 0.22 uV rms |
+| 32 | 0.42 | 0.93 | 0.15 | 1.15 uV rms | 0.21 uV rms |
+| 64 | 0.42 | 0.93 | 0.15 | 1.15 uV rms | 0.21 uV rms |
+| 128 | 0.42 | 0.93 | 0.15 | 1.15 uV rms | 0.21 uV rms |
 
 ## 5. Room for electrode DC offsets [datasheet range; offset spread assumed]
 
-| Gain | Largest offset that fits | Chance a channel clips, 25 mV rms spread | 50 mV | 100 mV |
-|---|---|---|---|---|
-| 1 | 1947 mV | 0 % | 0 % | 0 % |
-| 2 | 973 mV | 0 % | 0 % | 0 % |
-| 4 | 487 mV | 0 % | 0 % | 0 % |
-| 8 | 181 mV | 0 % | 0 % | 69 % |
-| 16 | 91 mV | 0 % | 69 % | 100 % |
-| 32 | 45 mV | 69 % | 100 % | 100 % |
-| 64 | 23 mV | 100 % | 100 % | 100 % |
-| 128 | 11 mV | 100 % | 100 % | 100 % |
+At gain 8 and above the converter's inputs draw a DC current. Through a dry contact that becomes a DC error of its own. The last two columns give the contact impedance at which that error alone fills the whole range: with the typical current from the datasheet graph, and with the table's worst-case figure as I interpret it.
+
+| Gain | Largest offset that fits | Chance a channel clips, 25 mV rms spread | 50 mV | 100 mV | Contact limit, typical current | Contact limit, worst current |
+|---|---|---|---|---|---|---|
+| 1 | 1947 mV | 0 % | 0 % | 0 % | no such current | no such current |
+| 2 | 973 mV | 0 % | 0 % | 0 % | no such current | no such current |
+| 4 | 487 mV | 0 % | 0 % | 0 % | no such current | no such current |
+| 8 | 158 mV | 0 % | 2 % | 86 % | 652 kOhm | 136 kOhm |
+| 16 | 83 mV | 1 % | 81 % | 100 % | 385 kOhm | 68 kOhm |
+| 32 | 42 mV | 79 % | 100 % | 100 % | 234 kOhm | 34 kOhm |
+| 64 | 21 mV | 100 % | 100 % | 100 % | 117 kOhm | 17 kOhm |
+| 128 | 10 mV | 100 % | 100 % | 100 % | 59 kOhm | 9 kOhm |
 
 ## 6. A simulated recording, eyes open then closed [source shape assumed]
 
 Alpha source: 20 uV at its peak against a distant reference, a smooth bump 30 mm wide (sigma); mains 1 mV rms on the body; random contacts and offsets. No background brain activity is modelled, so the eyes-open baseline is only electronics noise and these counts are optimistic.
 
-| Scenario | Largest real pin-to-reference difference | Channels showing alpha at 3x baseline | Best closed/open ratio |
-|---|---|---|---|
-| board 30 mm off the peak, gain 4 | 7.2 uV | 10 of 16 | 14.8 |
-| board 30 mm off the peak, gain 8 | 7.2 uV | 15 of 16 | 25.6 |
-| board centred on the peak, gain 4 | 1.6 uV | 0 of 16 | 2.1 |
+| Scenario | Largest real pin-to-reference difference | Channels showing alpha at 3x baseline | Channels saturated by input current | Best closed/open ratio |
+|---|---|---|---|---|
+| board 30 mm off the peak, gain 4 | 7.2 uV | 10 of 16 | 0 | 14.8 |
+| board 30 mm off the peak, gain 8 | 7.2 uV | 13 of 16 | 2 | 26.4 |
+| board centred on the peak, gain 4 | 1.6 uV | 0 of 16 | 0 | 2.1 |
 
 Mains line in that recording: 14-20 uV rms per channel for the assumed 1 mV.
 

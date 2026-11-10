@@ -30,8 +30,20 @@ ADC_NOISE_UV = dict(zip(GAINS, [1.90, 1.69, 1.56, 0.95, 0.64, 0.42, 0.42, 0.42])
 
 
 def adc_zin_diff(gain):
-    """Differential input impedance: 330 kOhm at gains 1-4, 'at least 1 MOhm' above."""
-    return 330e3 if gain <= 4 else 1e6
+    """Differential input impedance. 330 kOhm at gains 1-4 (electrical
+    characteristics table). At gain 8 and above a precharge buffer is switched
+    in and the table gives no impedance; these values are read by eye from the
+    high-resolution-mode curve of datasheet figure 6-5, so treat them as rough."""
+    return {1: 330e3, 2: 330e3, 4: 330e3, 8: 4e6, 16: 2e6}.get(gain, 1.8e6)
+
+
+# At gain 8 and above the inputs also draw a DC current, which a dry contact
+# turns into a DC error that the converter's range has to absorb.
+#   typical: the input offset current of figure 6-4 (high-resolution mode, by eye)
+#   worst:   the table's +-1 uA per volt, taken as per volt of input above AGND
+#            with the pins sitting at the 1.1 V bias  [interpretation assumed]
+ADC_IB_TYPICAL = {8: 230e-9, 16: 195e-9, 32: 160e-9, 64: 160e-9, 128: 160e-9}
+ADC_IB_WORST = 1e-6 * 1.1
 
 
 ADC_ABS_MAX_HIGH_GAIN = V["avdd"] - 1.8     # absolute input limit at gains >= 8
