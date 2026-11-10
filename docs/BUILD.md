@@ -61,6 +61,14 @@ overhangs the board edge on purpose.
 
 The spring pins are not in the assembly files; you solder those.
 
+**Ordering from PCBWay or another turnkey assembler:** upload the contents of
+[`hardware/production/limpet16-pcbway.zip`](../hardware/production/limpet16-pcbway.zip).
+It holds the gerbers, a BOM with manufacturer part numbers, pick-and-place
+files for both sides, the assembly drawing and a notes file for the assembler
+(board specification, the deliberate module overhang, polarity marks, and a
+request to quote with and without the spring pins). Regenerate it with
+`python3 hardware/scripts/pcbway.py`.
+
 ## 3. Solder the rest
 
 The board has no part numbers printed on it (there is no room). Use the
