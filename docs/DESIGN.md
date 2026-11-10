@@ -151,7 +151,6 @@ characteristic is different and uses its own UUID.
 | Body bias | ground | 1.1 V (ground selectable) |
 | Analog supply | not documented | separate low-noise regulator |
 | Stacking connector | yes | no |
-| Nominal sample rate | quoted as 250 SPS | 251.97 SPS, the true figure for this clock and oversampling setting |
 
 ## Known limits and open questions
 
@@ -194,7 +193,7 @@ to build one.
 10. **No ESD protection, fuse or reverse-current protection** on USB.
 11. **Silkscreen text is 0.5-0.7 mm high**, below the 0.8-1.0 mm many board
     houses recommend, and there are no part numbers on the board.
-12. **Bluetooth throughput** of 252 packets per second is a firmware
+12. **Bluetooth throughput** of 250 packets per second is a firmware
     assumption that depends on the connection interval the host grants.
 13. **The Mill-Max 0845 pin has a rolling-ball tip** made for sliding
     contacts. It was chosen because it is a documented, orderable
@@ -205,6 +204,11 @@ to build one.
     against it flexes it slightly; whether that ever cracks a ceramic
     capacitor is untested. Order 1.6 mm if you prefer stiffness (the design
     files do not change).
+
+15. **The exact sample rate needs measuring.** The converter datasheet's
+    tables give 250 SPS for this setting, but its register description
+    implies 251.97 SPS. 250 is assumed. Compare the packet count against a
+    stopwatch on the first board before trusting timing-sensitive analysis.
 
 ## Routing
 

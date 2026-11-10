@@ -18,7 +18,7 @@ SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 DATA_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 COMMAND_UUID = "6c696d70-6574-4c31-9601-000000000001"
 PACKET_BYTES = 51
-SAMPLE_RATE_HZ = 8192000 / 2 / 16256          # 251.97 samples per second
+SAMPLE_RATE_HZ = 8192000 / 2 / 16384          # 250 samples per second, nominal (not yet measured)
 GAINS = [1, 2, 4, 8, 16, 32, 64, 128]
 
 

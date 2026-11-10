@@ -26,9 +26,12 @@ constexpr uint16_t kResetAck = 0xFF28;
 // CLOCK register: all eight channels on, external clock (crystal driver off),
 // internal reference, high-resolution mode.
 constexpr uint16_t kClockBase = 0xFF00 | 0x0080 | 0x0002;
-// OSR code 7 = 16256. With the 8.192 MHz clock: 4 096 000 / 16256 = 251.97 SPS.
-constexpr uint8_t kOsr16256 = 7;
-constexpr double kSampleRateHz = 8192000.0 / 2.0 / 16256.0;
+// OSR code 7 is the highest oversampling ratio. The datasheet's filter and
+// noise tables give it as 16384 (sinc3 at 1024 followed by sinc1 at 16), i.e.
+// 250 SPS with the 8.192 MHz clock; the CLOCK register description alone says
+// 16256 (251.97 SPS). 250 is taken as nominal here until measured on a board.
+constexpr uint8_t kOsrMax = 7;
+constexpr double kSampleRateHz = 8192000.0 / 2.0 / 16384.0;
 
 inline uint16_t cmd_rreg(uint8_t addr, uint8_t count = 1) {
   return 0xA000 | (uint16_t(addr & 0x3F) << 7) | ((count - 1) & 0x7F);

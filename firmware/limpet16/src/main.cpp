@@ -25,7 +25,7 @@ static const int PIN_LED = 3;      // status LED, on when high
 
 // ---- settings ---------------------------------------------------------------
 static const uint8_t DEFAULT_GAIN_CODE = 2;   // gain 4: +-300 mV, 0.0358 uV per count
-static const uint8_t DCBLOCK = 5;             // built-in high-pass, about 0.6 Hz at 252 SPS
+static const uint8_t DCBLOCK = 5;             // built-in high-pass, about 0.6 Hz at 250 SPS
 static const uint32_t SPI_HZ = 4000000;
 
 // Same service / data characteristic UUIDs as the PiEEG Octopus 16 stream so
@@ -92,8 +92,8 @@ static bool startConverters(uint8_t gainCode) {
   idB = adcB.read_reg(ads131::REG_ID);
   Serial.printf("ADC A id 0x%04X, ADC B id 0x%04X\n", idA, idB);
   if ((idA >> 8) != 0x28 || (idB >> 8) != 0x28) return false;
-  bool ok = adcA.configure(gainCode, ads131::kOsr16256, DCBLOCK);
-  ok = adcB.configure(gainCode, ads131::kOsr16256, DCBLOCK) && ok;
+  bool ok = adcA.configure(gainCode, ads131::kOsrMax, DCBLOCK);
+  ok = adcB.configure(gainCode, ads131::kOsrMax, DCBLOCK) && ok;
   syncPulse();
   return ok;
 }

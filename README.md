@@ -24,7 +24,7 @@ samples over Bluetooth LE. Power and programming go through one USB-C socket.
 | Channels | 16, plus a reference pin and a bias pin, in one 30 mm cluster |
 | Electrodes | 18 surface-mount spring pins, 4 mm tip, 6.5 mm apart |
 | Converters | 2 x TI ADS131M08, 24-bit, all channels sampled at the same instant |
-| Sample rate | 251.97 samples/s (8.192 MHz clock, oversampling 16256) |
+| Sample rate | 250 samples/s nominal (8.192 MHz clock, highest oversampling setting; not yet measured) |
 | Reference | Buffered by a low-noise op-amp (can be bypassed) |
 | Processor and radio | Espressif ESP32-C3-WROOM-02 module, soldered on |
 | Link | Bluetooth LE, one 51-byte packet per sample |

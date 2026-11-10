@@ -63,7 +63,7 @@ int main() {
   CHECK(ads131::cmd_rreg(0x00) == 0xA000);
   CHECK(ads131::cmd_rreg(0x03) == 0xA180);
   CHECK(ads131::cmd_wreg(0x04) == 0x6200);
-  CHECK(ads131::clock_reg(7) == 0xFF9E);           // all channels, XTAL off, OSR 16256, HR
+  CHECK(ads131::clock_reg(7) == 0xFF9E);           // all channels, XTAL off, highest OSR, HR
   CHECK(ads131::gain_reg(2) == 0x2222);
   CHECK(ads131::sign_extend24(0xFFFFFF) == -1);
   CHECK(ads131::sign_extend24(0x800000) == -8388608);
@@ -71,8 +71,8 @@ int main() {
 
   CHECK((a.read_reg(ads131::REG_ID) >> 8) == 0x28);
   CHECK(a.reset());
-  CHECK(a.configure(2, ads131::kOsr16256, 5));
-  CHECK(b.configure(2, ads131::kOsr16256, 5));
+  CHECK(a.configure(2, ads131::kOsrMax, 5));
+  CHECK(b.configure(2, ads131::kOsrMax, 5));
   CHECK(simA.reg[0x03] == 0xFF9E && simA.reg[0x04] == 0x2222 && simA.reg[0x05] == 0x2222);
   CHECK(simA.reg[0x08] == 0x0005);
   CHECK(a.write_reg_verified(ads131::REG_GAIN1, 0x2222));
@@ -96,7 +96,7 @@ int main() {
   CHECK(pkt[47] == 0x00 && pkt[48] == 0x00 && pkt[49] == 200);
   double uv = limpet::microvolts_per_count(4);
   CHECK(uv > 0.03576 && uv < 0.03577);
-  CHECK(ads131::kSampleRateHz > 251.9 && ads131::kSampleRateHz < 252.0);
+  CHECK(ads131::kSampleRateHz == 250.0);
   printf("all firmware host tests passed (%d + %d simulated frames)\n", simA.frames, simB.frames);
   return 0;
 }
