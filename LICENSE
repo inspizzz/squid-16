@@ -1,0 +1,17 @@
+Limpet-16 is open source. Different parts carry different licences:
+
+  hardware/   CERN Open Hardware Licence Version 2 - Permissive
+              (CERN-OHL-P-2.0), see LICENSES/CERN-OHL-P-2.0.txt
+              This covers the schematic, board layout, footprints, the
+              generator scripts in hardware/scripts and the fabrication files.
+
+  firmware/   MIT License, see LICENSES/MIT.txt
+  software/
+
+  docs/       Creative Commons Attribution 4.0 International (CC-BY-4.0),
+  README.md   see LICENSES/CC-BY-4.0.txt
+
+Copyright (c) 2026 Limpet-16 contributors.
+
+You may make, modify, sell and redistribute this design. It comes with no
+warranty of any kind. It is NOT a medical device.

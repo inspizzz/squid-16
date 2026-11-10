@@ -1,0 +1,13 @@
+# KiCad local state
+hardware/*-backups/
+hardware/fp-info-cache
+hardware/*.kicad_prl
+hardware/*.lck
+# PlatformIO
+firmware/limpet16/.pio/
+# Python
+__pycache__/
+*.pyc
+# recordings
+*.csv
+!hardware/production/*.csv

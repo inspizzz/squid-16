@@ -1,0 +1,106 @@
+# Limpet-16
+
+An open-source, coin-sized, 16-channel dry-electrode EEG front end. Eighteen
+spring-loaded pins press on one spot of the scalp, two 24-bit converters
+digitise them, and a Seeed Studio XIAO ESP32-S3 streams the samples over
+Bluetooth LE.
+
+![Top side](docs/img/board-top.png)
+
+> **Not a medical device.** This is an experimenter's board. It has no
+> isolation from its power supply: wear it only while it runs from a battery or
+> power bank, never while it is connected to a computer or a wall charger.
+
+> **Status: revision A, not yet built.** The design passes KiCad's electrical
+> and design-rule checks and the firmware compiles and passes its PC-side
+> tests, but no board has been manufactured or powered. Expect to debug. There
+> are no measured noise or performance figures yet. See
+> [what has and has not been verified](#what-has-been-verified).
+
+## What it is
+
+| | |
+|---|---|
+| Channels | 16, plus a reference pin and a bias pin, in one 30 mm cluster |
+| Electrodes | 18 surface-mount spring pins, 4 mm tip, 6.5 mm apart |
+| Converters | 2 x TI ADS131M08, 24-bit, all channels sampled at the same instant |
+| Sample rate | 251.97 samples/s (8.192 MHz clock, oversampling 16256) |
+| Reference | Buffered by a low-noise op-amp (can be bypassed) |
+| Controller | Seeed Studio XIAO ESP32-S3, plugged into two sockets |
+| Link | Bluetooth LE, one 51-byte packet per sample |
+| Board | 32 mm round, 4 layers, parts on top, pins underneath |
+| Power | 5 V through the XIAO's USB-C, from a power bank |
+
+Limpet-16 is an independent design inspired by the PiEEG "Octopus 16" idea of
+putting the whole montage, reference included, on one small board. It shares no
+design files or code with that product (which publishes neither schematics nor
+a licence); it is drawn from the component datasheets. Its data stream uses the
+same packet layout, so viewers written for that format can read it.
+[How it differs](docs/DESIGN.md#how-it-differs-from-the-board-that-inspired-it).
+
+## Repository map
+
+```
+README.md            you are here
+LICENSE              which licence covers what
+docs/
+  BUILD.md           order, assemble, flash, first signal: start here to make one
+  DESIGN.md          how the circuit works, pin maps, limits, open questions
+  img/               renders and layer pictures
+hardware/
+  limpet16.kicad_pro / .kicad_sch / .kicad_pcb    open these in KiCad 9
+  lib/               the one custom footprint (spring pin)
+  production/        ready-to-upload gerbers, BOM, placement files, schematic PDF
+  scripts/           the design as code: one file in, schematic + board out
+firmware/
+  limpet16/          PlatformIO project for the XIAO ESP32-S3
+  test/              PC-side tests of the driver against a simulated converter
+software/
+  limpet16.py        record to CSV over Bluetooth
+```
+
+## Make one
+
+The short version; [docs/BUILD.md](docs/BUILD.md) has every step.
+
+1. Upload `hardware/production/limpet16-gerbers.zip` to a board house
+   (4 layers, 1.6 mm, ENIG finish).
+2. Have the top side assembled from `bom-jlcpcb.csv` and `positions-top-jlcpcb.csv`,
+   or solder it yourself.
+3. Solder the two sockets and the 18 spring pins by hand.
+4. Flash the XIAO: `cd firmware/limpet16 && pio run -t upload`.
+5. Plug the XIAO in with its USB-C socket over the `USB` mark, power it from a
+   power bank, and run `python3 software/limpet16.py --seconds 30`.
+
+## Change it
+
+The whole board is generated from one Python file,
+[`hardware/scripts/design.py`](hardware/scripts/design.py): every part, net and
+position. Edit it and run
+
+```
+hardware/scripts/build.sh
+```
+
+to regenerate the schematic, place and route the board, run the checks and
+write new fabrication files (about a minute; needs KiCad 9 and numpy). You can
+also just open the KiCad files and edit them by hand, but then stop using the
+generator, because it overwrites them.
+
+## What has been verified
+
+| Check | Result |
+|---|---|
+| Schematic electrical rules (KiCad ERC, all severities) | 0 violations |
+| Board design rules (KiCad DRC, all severities) | 0 violations, 0 unconnected |
+| Schematic and board agree (DRC parity, plus a pin-by-pin netlist comparison with `design.py`) | 0 differences |
+| Firmware driver and packet code against a simulated ADS131M08 (`firmware/test/run.sh`) | pass |
+| Firmware builds for the XIAO ESP32-S3 (PlatformIO, Arduino core, NimBLE-Arduino) | builds, 730 kB flash |
+| Recorder packet decoder (`limpet16.py --selftest`) | pass |
+| A manufactured board | **not done** |
+| Firmware on real hardware, Bluetooth throughput, noise, signal quality | **not done** |
+
+## Licence
+
+Hardware: CERN-OHL-P-2.0. Firmware and software: MIT. Documentation: CC-BY-4.0.
+See [LICENSE](LICENSE). You may build, change and sell it.
