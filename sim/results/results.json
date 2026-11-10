@@ -1,0 +1,726 @@
+{
+ "board_revision": "B",
+ "sample_rate_assumed": 250.0,
+ "wiring": {
+  "gpio_checks": {
+   "SCLK": true,
+   "MISO": true,
+   "MOSI": true,
+   "DRDY": true,
+   "RESET": true,
+   "LED": true,
+   "CS_A": true,
+   "CS_B": true,
+   "DRDY from converter A": true
+  },
+  "gpio_all_ok": true,
+  "channels_in_wrong_place": [],
+  "max_amplitude_error_percent": 0.0030074075273773815,
+  "packets": 2500,
+  "packets_lost_or_misframed": 0
+ },
+ "retention": {
+  "contact_ohm": [
+   10000.0,
+   30000.0,
+   100000.0,
+   300000.0,
+   1000000.0
+  ],
+  "fraction_kept_at_10Hz": {
+   "4": [
+    0.9572194924284637,
+    0.9045691985711957,
+    0.7585408734437235,
+    0.5191070488499386,
+    0.2466324655579464
+   ],
+   "8": [
+    0.9853701887623281,
+    0.966139598126813,
+    0.9043652331345261,
+    0.7646699350579845,
+    0.49632844372572754
+   ]
+  }
+ },
+ "monte_carlo": {
+  "device": "cpu (numpy); no CUDA device visible",
+  "trials": 200000,
+  "contact_range_ohm": [
+   20000.0,
+   1000000.0
+  ],
+  "cases": {
+   "as built, gain 4": {
+    "median_fraction_of_signal_kept": 0.6915972195603708,
+    "weakest_over_strongest_channel_median": 0.30479965984404,
+    "hum_uV_per_mV_common_mode_median": 16.798108471823987,
+    "hum_uV_per_mV_common_mode_95th": 70.15030529809793,
+    "rejection_dB_median": 35.49479237321882
+   },
+   "as built, gain 8": {
+    "median_fraction_of_signal_kept": 0.8703679732962177,
+    "weakest_over_strongest_channel_median": 0.5539491734820777,
+    "hum_uV_per_mV_common_mode_median": 32.47274486087069,
+    "hum_uV_per_mV_common_mode_95th": 74.45453606083542,
+    "rejection_dB_median": 29.769619994313206
+   },
+   "gain 8, hold resistor 100M instead of 10M": {
+    "median_fraction_of_signal_kept": 0.8701939868961199,
+    "weakest_over_strongest_channel_median": 0.5541217887923292,
+    "hum_uV_per_mV_common_mode_median": 30.778261527535122,
+    "hum_uV_per_mV_common_mode_95th": 34.074438636164835,
+    "rejection_dB_median": 30.2351182880901
+   },
+   "gain 8, filter capacitors 47 pF instead of 220 pF": {
+    "median_fraction_of_signal_kept": 0.8702659680522182,
+    "weakest_over_strongest_channel_median": 0.5544143432049933,
+    "hum_uV_per_mV_common_mode_median": 14.175328455182596,
+    "hum_uV_per_mV_common_mode_95th": 74.58250881132949,
+    "rejection_dB_median": 36.96933738644966
+   },
+   "gain 8, filter capacitors returned to REFN, not GND": {
+    "median_fraction_of_signal_kept": 0.870424566582911,
+    "weakest_over_strongest_channel_median": 0.5541260736396285,
+    "hum_uV_per_mV_common_mode_median": 14.247590191725925,
+    "hum_uV_per_mV_common_mode_95th": 74.53709773207504,
+    "rejection_dB_median": 36.925171702496
+   },
+   "gain 8, both: caps to REFN and 100M hold": {
+    "median_fraction_of_signal_kept": 0.8701825067393503,
+    "weakest_over_strongest_channel_median": 0.553976124600727,
+    "hum_uV_per_mV_common_mode_median": 4.171864504039245,
+    "hum_uV_per_mV_common_mode_95th": 9.163744736662906,
+    "rejection_dB_median": 47.59339610511947
+   },
+   "gain 8, reference not buffered (R19 option)": {
+    "median_fraction_of_signal_kept": 0.8701010571033803,
+    "weakest_over_strongest_channel_median": 0.5538176647288644,
+    "hum_uV_per_mV_common_mode_median": 24.364724676154186,
+    "hum_uV_per_mV_common_mode_95th": 30.227066859599923,
+    "rejection_dB_median": 32.26476983652798
+   }
+  }
+ },
+ "noise": {
+  "contact_ohm_assumed": 200000.0,
+  "by_gain": {
+   "1": {
+    "converter_uV": 1.9,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 2.1190932822267974,
+    "fraction_kept": 0.6163888558889613,
+    "referred_to_scalp_uV_rms": 3.4379162796034377,
+    "in_8_12Hz_band_uV_rms": 0.6149931601717168
+   },
+   "2": {
+    "converter_uV": 1.69,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 1.9330432842486331,
+    "fraction_kept": 0.6163888558889613,
+    "referred_to_scalp_uV_rms": 3.1360776006580804,
+    "in_8_12Hz_band_uV_rms": 0.5609986158228726
+   },
+   "4": {
+    "converter_uV": 1.56,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 1.8204824467098666,
+    "fraction_kept": 0.6163888558889613,
+    "referred_to_scalp_uV_rms": 2.9534642447166752,
+    "in_8_12Hz_band_uV_rms": 0.5283317456241248
+   },
+   "8": {
+    "converter_uV": 0.95,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 1.3353113265372767,
+    "fraction_kept": 0.8286718350976597,
+    "referred_to_scalp_uV_rms": 1.6113873670871282,
+    "in_8_12Hz_band_uV_rms": 0.28825373527129805
+   },
+   "16": {
+    "converter_uV": 0.64,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 1.135850491384646,
+    "fraction_kept": 0.8286718350976597,
+    "referred_to_scalp_uV_rms": 1.3706879409637291,
+    "in_8_12Hz_band_uV_rms": 0.24519611295472937
+   },
+   "32": {
+    "converter_uV": 0.42,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 1.028083818946073,
+    "fraction_kept": 0.8286718350976597,
+    "referred_to_scalp_uV_rms": 1.2406404747965307,
+    "in_8_12Hz_band_uV_rms": 0.22193251498261257
+   },
+   "64": {
+    "converter_uV": 0.42,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 1.028083818946073,
+    "fraction_kept": 0.8286718350976597,
+    "referred_to_scalp_uV_rms": 1.2406404747965307,
+    "in_8_12Hz_band_uV_rms": 0.22193251498261257
+   },
+   "128": {
+    "converter_uV": 0.42,
+    "contacts_thermal_uV": 0.9267322754981613,
+    "buffer_uV": 0.14738937658034235,
+    "total_at_converter_uV": 1.028083818946073,
+    "fraction_kept": 0.8286718350976597,
+    "referred_to_scalp_uV_rms": 1.2406404747965307,
+    "in_8_12Hz_band_uV_rms": 0.22193251498261257
+   }
+  }
+ },
+ "offsets": {
+  "by_gain": {
+   "1": {
+    "offset_limit_mV": 1946.8200363665972,
+    "chance_any_channel_clips_sigma_25mV": 0.0,
+    "chance_any_channel_clips_sigma_50mV": 0.0,
+    "chance_any_channel_clips_sigma_100mV": 0.0
+   },
+   "2": {
+    "offset_limit_mV": 973.4100181832986,
+    "chance_any_channel_clips_sigma_25mV": 0.0,
+    "chance_any_channel_clips_sigma_50mV": 0.0,
+    "chance_any_channel_clips_sigma_100mV": 0.0
+   },
+   "4": {
+    "offset_limit_mV": 486.7050090916493,
+    "chance_any_channel_clips_sigma_25mV": 0.0,
+    "chance_any_channel_clips_sigma_50mV": 0.0,
+    "chance_any_channel_clips_sigma_100mV": 1.812405816248308e-05
+   },
+   "8": {
+    "offset_limit_mV": 181.01205000049757,
+    "chance_any_channel_clips_sigma_25mV": 7.153388992264809e-12,
+    "chance_any_channel_clips_sigma_50mV": 0.004698878617655611,
+    "chance_any_channel_clips_sigma_100mV": 0.6883576777481549
+   },
+   "16": {
+    "offset_limit_mV": 90.50602500024878,
+    "chance_any_channel_clips_sigma_25mV": 0.004698878617655611,
+    "chance_any_channel_clips_sigma_50mV": 0.6883576777481549,
+    "chance_any_channel_clips_sigma_100mV": 0.9993087508731312
+   },
+   "32": {
+    "offset_limit_mV": 45.25301250012439,
+    "chance_any_channel_clips_sigma_25mV": 0.6883576777481549,
+    "chance_any_channel_clips_sigma_50mV": 0.9993087508731312,
+    "chance_any_channel_clips_sigma_100mV": 0.9999999513084201
+   },
+   "64": {
+    "offset_limit_mV": 22.626506250062196,
+    "chance_any_channel_clips_sigma_25mV": 0.9993087508731312,
+    "chance_any_channel_clips_sigma_50mV": 0.9999999513084201,
+    "chance_any_channel_clips_sigma_100mV": 0.9999999999988887
+   },
+   "128": {
+    "offset_limit_mV": 11.313253125031098,
+    "chance_any_channel_clips_sigma_25mV": 0.9999999513084201,
+    "chance_any_channel_clips_sigma_50mV": 0.9999999999988887,
+    "chance_any_channel_clips_sigma_100mV": 1.0
+   }
+  },
+  "bias_V": 1.1,
+  "abs_input_limit_gain8plus_V": 1.4999999999999998
+ },
+ "recording": {
+  "per_channel": {
+   "CH1": {
+    "true_pin_minus_ref_uV_peak": 0.2445995196587009,
+    "alpha_band_uV_rms_eyes_closed": 0.3786989005867055,
+    "alpha_band_uV_rms_eyes_open": 0.35674800860573125,
+    "closed_over_open": 1.061530524211654,
+    "mains_uV_rms": 14.613241739549489
+   },
+   "CH2": {
+    "true_pin_minus_ref_uV_peak": 0.9978963306822235,
+    "alpha_band_uV_rms_eyes_closed": 0.551127314044689,
+    "alpha_band_uV_rms_eyes_open": 0.3164108262918802,
+    "closed_over_open": 1.7418092816340276,
+    "mains_uV_rms": 13.672918034277387
+   },
+   "CH3": {
+    "true_pin_minus_ref_uV_peak": -1.3866738420540325,
+    "alpha_band_uV_rms_eyes_closed": 0.6098056162762183,
+    "alpha_band_uV_rms_eyes_open": 0.3334599835893886,
+    "closed_over_open": 1.8287220244906879,
+    "mains_uV_rms": 14.265958712015477
+   },
+   "CH4": {
+    "true_pin_minus_ref_uV_peak": -2.158558727370238,
+    "alpha_band_uV_rms_eyes_closed": 1.0079666879358258,
+    "alpha_band_uV_rms_eyes_open": 0.3310870397968988,
+    "closed_over_open": 3.044416019890571,
+    "mains_uV_rms": 15.133637414451249
+   },
+   "CH5": {
+    "true_pin_minus_ref_uV_peak": -2.083641394813065,
+    "alpha_band_uV_rms_eyes_closed": 1.225505219858353,
+    "alpha_band_uV_rms_eyes_open": 0.2837912654260215,
+    "closed_over_open": 4.318333117189671,
+    "mains_uV_rms": 18.791114842699447
+   },
+   "CH6": {
+    "true_pin_minus_ref_uV_peak": -1.1585745295878616,
+    "alpha_band_uV_rms_eyes_closed": 0.6521123468470649,
+    "alpha_band_uV_rms_eyes_open": 0.35049924874924243,
+    "closed_over_open": 1.8605242355700609,
+    "mains_uV_rms": 18.351400051474304
+   },
+   "CH7": {
+    "true_pin_minus_ref_uV_peak": 0.620510098026614,
+    "alpha_band_uV_rms_eyes_closed": 0.6297783668049646,
+    "alpha_band_uV_rms_eyes_open": 0.2610836496561966,
+    "closed_over_open": 2.412170841162505,
+    "mains_uV_rms": 20.124945441462994
+   },
+   "CH8": {
+    "true_pin_minus_ref_uV_peak": 1.183899438030432,
+    "alpha_band_uV_rms_eyes_closed": 0.9323939894732433,
+    "alpha_band_uV_rms_eyes_open": 0.2500026875399741,
+    "closed_over_open": 3.729535864786087,
+    "mains_uV_rms": 18.349301418734143
+   },
+   "CH9": {
+    "true_pin_minus_ref_uV_peak": 2.609506761349109,
+    "alpha_band_uV_rms_eyes_closed": 0.7689005673292262,
+    "alpha_band_uV_rms_eyes_open": 0.3243309476344832,
+    "closed_over_open": 2.3707283345521724,
+    "mains_uV_rms": 14.73568665611523
+   },
+   "CH10": {
+    "true_pin_minus_ref_uV_peak": 3.545048712386029,
+    "alpha_band_uV_rms_eyes_closed": 2.4828258747614362,
+    "alpha_band_uV_rms_eyes_open": 0.2493705912947178,
+    "closed_over_open": 9.95637000285698,
+    "mains_uV_rms": 19.59431306025659
+   },
+   "CH11": {
+    "true_pin_minus_ref_uV_peak": 5.189355115014135,
+    "alpha_band_uV_rms_eyes_closed": 2.0479453011350017,
+    "alpha_band_uV_rms_eyes_open": 0.3309410148391462,
+    "closed_over_open": 6.188248688759249,
+    "mains_uV_rms": 13.694158111534456
+   },
+   "CH12": {
+    "true_pin_minus_ref_uV_peak": 7.0178486355632455,
+    "alpha_band_uV_rms_eyes_closed": 4.650667260652167,
+    "alpha_band_uV_rms_eyes_open": 0.3139310485929664,
+    "closed_over_open": 14.814295309420263,
+    "mains_uV_rms": 19.376734450831748
+   },
+   "CH13": {
+    "true_pin_minus_ref_uV_peak": 7.18602030054287,
+    "alpha_band_uV_rms_eyes_closed": 3.2829869065044206,
+    "alpha_band_uV_rms_eyes_open": 0.3038791929454187,
+    "closed_over_open": 10.803592291671299,
+    "mains_uV_rms": 14.210479253098933
+   },
+   "CH14": {
+    "true_pin_minus_ref_uV_peak": 5.601639946252156,
+    "alpha_band_uV_rms_eyes_closed": 3.114469742490824,
+    "alpha_band_uV_rms_eyes_open": 0.34378210025695666,
+    "closed_over_open": 9.059429621736976,
+    "mains_uV_rms": 16.13274109414781
+   },
+   "CH15": {
+    "true_pin_minus_ref_uV_peak": 3.0763614071611602,
+    "alpha_band_uV_rms_eyes_closed": 1.8083488447954887,
+    "alpha_band_uV_rms_eyes_open": 0.27509919808817473,
+    "closed_over_open": 6.573442806677601,
+    "mains_uV_rms": 16.500856815657613
+   },
+   "CH16": {
+    "true_pin_minus_ref_uV_peak": 3.7760515619945836,
+    "alpha_band_uV_rms_eyes_closed": 2.460577358126957,
+    "alpha_band_uV_rms_eyes_open": 0.31937149769816353,
+    "closed_over_open": 7.7044362939752284,
+    "mains_uV_rms": 18.45745089473113
+   }
+  },
+  "packets_lost": 0,
+  "gain": 4,
+  "channels_with_alpha_3x_above_baseline": 10,
+  "best_closed_over_open": 14.814295309420263,
+  "largest_true_difference_uV": 7.18602030054287,
+  "scenario": {
+   "alpha_uv_at_peak_vs_far_reference": 20.0,
+   "bump_sigma_mm": 30.0,
+   "peak_offset_from_board_mm": 30.0,
+   "mains_common_mode_mV_rms": 1.0
+  }
+ },
+ "recording_on_peak": {
+  "per_channel": {
+   "CH1": {
+    "true_pin_minus_ref_uV_peak": -1.5541920494495336,
+    "alpha_band_uV_rms_eyes_closed": 0.49759492618676326,
+    "alpha_band_uV_rms_eyes_open": 0.35674800860573125,
+    "closed_over_open": 1.3948078592828037,
+    "mains_uV_rms": 14.61308523690541
+   },
+   "CH2": {
+    "true_pin_minus_ref_uV_peak": -0.17010967320521334,
+    "alpha_band_uV_rms_eyes_closed": 0.31837689874141234,
+    "alpha_band_uV_rms_eyes_open": 0.3164108262918802,
+    "closed_over_open": 1.0062136699700612,
+    "mains_uV_rms": 13.67306701279119
+   },
+   "CH3": {
+    "true_pin_minus_ref_uV_peak": -1.4631428399768827,
+    "alpha_band_uV_rms_eyes_closed": 0.5594802745849171,
+    "alpha_band_uV_rms_eyes_open": 0.3334599835893886,
+    "closed_over_open": 1.6778033410864743,
+    "mains_uV_rms": 14.266275205406037
+   },
+   "CH4": {
+    "true_pin_minus_ref_uV_peak": -1.304403619707626,
+    "alpha_band_uV_rms_eyes_closed": 0.5302973785716697,
+    "alpha_band_uV_rms_eyes_open": 0.3310870397968988,
+    "closed_over_open": 1.6016857044509323,
+    "mains_uV_rms": 15.133675337528704
+   },
+   "CH5": {
+    "true_pin_minus_ref_uV_peak": -1.119342661790297,
+    "alpha_band_uV_rms_eyes_closed": 0.5177257478057736,
+    "alpha_band_uV_rms_eyes_open": 0.2837912654260215,
+    "closed_over_open": 1.8243188247128557,
+    "mains_uV_rms": 18.79114143488112
+   },
+   "CH6": {
+    "true_pin_minus_ref_uV_peak": -0.9575418596465666,
+    "alpha_band_uV_rms_eyes_closed": 0.43425977355919587,
+    "alpha_band_uV_rms_eyes_open": 0.35049924874924243,
+    "closed_over_open": 1.2389749053923884,
+    "mains_uV_rms": 18.351316625153945
+   },
+   "CH7": {
+    "true_pin_minus_ref_uV_peak": -0.8635065202543337,
+    "alpha_band_uV_rms_eyes_closed": 0.4216402546154679,
+    "alpha_band_uV_rms_eyes_open": 0.2610836496561966,
+    "closed_over_open": 1.6149623125412005,
+    "mains_uV_rms": 20.125121326873472
+   },
+   "CH8": {
+    "true_pin_minus_ref_uV_peak": 0.1716462177530102,
+    "alpha_band_uV_rms_eyes_closed": 0.5039193137677256,
+    "alpha_band_uV_rms_eyes_open": 0.2500026875399741,
+    "closed_over_open": 2.015655586451052,
+    "mains_uV_rms": 18.349415050359088
+   },
+   "CH9": {
+    "true_pin_minus_ref_uV_peak": -1.5541920494495336,
+    "alpha_band_uV_rms_eyes_closed": 0.4245255884952304,
+    "alpha_band_uV_rms_eyes_open": 0.3243309476344832,
+    "closed_over_open": 1.308927167115934,
+    "mains_uV_rms": 14.735670974510283
+   },
+   "CH10": {
+    "true_pin_minus_ref_uV_peak": -0.17010967320521334,
+    "alpha_band_uV_rms_eyes_closed": 0.354556682088586,
+    "alpha_band_uV_rms_eyes_open": 0.2493705912947178,
+    "closed_over_open": 1.421806317448052,
+    "mains_uV_rms": 19.5945749712725
+   },
+   "CH11": {
+    "true_pin_minus_ref_uV_peak": -1.4631428399768827,
+    "alpha_band_uV_rms_eyes_closed": 0.5328454680709691,
+    "alpha_band_uV_rms_eyes_open": 0.3309410148391462,
+    "closed_over_open": 1.6100919625509655,
+    "mains_uV_rms": 13.69426187506318
+   },
+   "CH12": {
+    "true_pin_minus_ref_uV_peak": -1.304403619707626,
+    "alpha_band_uV_rms_eyes_closed": 0.664366356032291,
+    "alpha_band_uV_rms_eyes_open": 0.3139310485929664,
+    "closed_over_open": 2.11628113565055,
+    "mains_uV_rms": 19.37671513403831
+   },
+   "CH13": {
+    "true_pin_minus_ref_uV_peak": -1.119342661790297,
+    "alpha_band_uV_rms_eyes_closed": 0.3934806390610983,
+    "alpha_band_uV_rms_eyes_open": 0.3038791929454187,
+    "closed_over_open": 1.294858773472435,
+    "mains_uV_rms": 14.211074719997223
+   },
+   "CH14": {
+    "true_pin_minus_ref_uV_peak": -0.9575418596465666,
+    "alpha_band_uV_rms_eyes_closed": 0.42628174346773595,
+    "alpha_band_uV_rms_eyes_open": 0.34378210025695666,
+    "closed_over_open": 1.2399765524415487,
+    "mains_uV_rms": 16.13274855352313
+   },
+   "CH15": {
+    "true_pin_minus_ref_uV_peak": -0.8635065202543337,
+    "alpha_band_uV_rms_eyes_closed": 0.4199521272749949,
+    "alpha_band_uV_rms_eyes_open": 0.27509919808817473,
+    "closed_over_open": 1.5265479877567363,
+    "mains_uV_rms": 16.500727090260586
+   },
+   "CH16": {
+    "true_pin_minus_ref_uV_peak": 0.1716462177530102,
+    "alpha_band_uV_rms_eyes_closed": 0.44871285243098125,
+    "alpha_band_uV_rms_eyes_open": 0.31937149769816353,
+    "closed_over_open": 1.4049871565403673,
+    "mains_uV_rms": 18.456991729154367
+   }
+  },
+  "packets_lost": 0,
+  "gain": 4,
+  "channels_with_alpha_3x_above_baseline": 0,
+  "best_closed_over_open": 2.11628113565055,
+  "largest_true_difference_uV": 1.5541920494495336,
+  "scenario": {
+   "alpha_uv_at_peak_vs_far_reference": 20.0,
+   "bump_sigma_mm": 30.0,
+   "peak_offset_from_board_mm": 0.0,
+   "mains_common_mode_mV_rms": 1.0
+  }
+ },
+ "recording_gain8": {
+  "per_channel": {
+   "CH1": {
+    "true_pin_minus_ref_uV_peak": 0.2445995196587009,
+    "alpha_band_uV_rms_eyes_closed": 0.3250820926217183,
+    "alpha_band_uV_rms_eyes_open": 0.27602807774660776,
+    "closed_over_open": 1.1777138589507616,
+    "mains_uV_rms": 26.464098866327642
+   },
+   "CH2": {
+    "true_pin_minus_ref_uV_peak": 0.9978963306822235,
+    "alpha_band_uV_rms_eyes_closed": 0.7053113634461928,
+    "alpha_band_uV_rms_eyes_open": 0.22561084199027945,
+    "closed_over_open": 3.1262299153007085,
+    "mains_uV_rms": 20.529705366685484
+   },
+   "CH3": {
+    "true_pin_minus_ref_uV_peak": -1.3866738420540325,
+    "alpha_band_uV_rms_eyes_closed": 0.7402133998690856,
+    "alpha_band_uV_rms_eyes_open": 0.22831276596805505,
+    "closed_over_open": 3.2421025461741126,
+    "mains_uV_rms": 19.42042385938596
+   },
+   "CH4": {
+    "true_pin_minus_ref_uV_peak": -2.158558727370238,
+    "alpha_band_uV_rms_eyes_closed": 1.242289331728065,
+    "alpha_band_uV_rms_eyes_open": 0.22103811514297647,
+    "closed_over_open": 5.620249389678796,
+    "mains_uV_rms": 19.342635635326005
+   },
+   "CH5": {
+    "true_pin_minus_ref_uV_peak": -2.083641394813065,
+    "alpha_band_uV_rms_eyes_closed": 1.3161562259823476,
+    "alpha_band_uV_rms_eyes_open": 0.1788489551999257,
+    "closed_over_open": 7.359037823347007,
+    "mains_uV_rms": 20.673481413315617
+   },
+   "CH6": {
+    "true_pin_minus_ref_uV_peak": -1.1585745295878616,
+    "alpha_band_uV_rms_eyes_closed": 0.6732741484449354,
+    "alpha_band_uV_rms_eyes_open": 0.22214774691039813,
+    "closed_over_open": 3.0307493900286833,
+    "mains_uV_rms": 20.484045817618306
+   },
+   "CH7": {
+    "true_pin_minus_ref_uV_peak": 0.620510098026614,
+    "alpha_band_uV_rms_eyes_closed": 0.617041391600069,
+    "alpha_band_uV_rms_eyes_open": 0.16231552379204506,
+    "closed_over_open": 3.801493394991648,
+    "mains_uV_rms": 21.26658150684506
+   },
+   "CH8": {
+    "true_pin_minus_ref_uV_peak": 1.183899438030432,
+    "alpha_band_uV_rms_eyes_closed": 0.9923800597946763,
+    "alpha_band_uV_rms_eyes_open": 0.15832854746266403,
+    "closed_over_open": 6.267852991127153,
+    "mains_uV_rms": 20.475722841670994
+   },
+   "CH9": {
+    "true_pin_minus_ref_uV_peak": 2.609506761349109,
+    "alpha_band_uV_rms_eyes_closed": 1.2379837891180319,
+    "alpha_band_uV_rms_eyes_open": 0.25282918293879303,
+    "closed_over_open": 4.896522524528876,
+    "mains_uV_rms": 27.17311973570188
+   },
+   "CH10": {
+    "true_pin_minus_ref_uV_peak": 3.545048712386029,
+    "alpha_band_uV_rms_eyes_closed": 2.6507376360733326,
+    "alpha_band_uV_rms_eyes_open": 0.15572266087932315,
+    "closed_over_open": 17.022170190936528,
+    "mains_uV_rms": 21.03106693005255
+   },
+   "CH11": {
+    "true_pin_minus_ref_uV_peak": 5.189355115014135,
+    "alpha_band_uV_rms_eyes_closed": 2.998144625394875,
+    "alpha_band_uV_rms_eyes_open": 0.23387415781313758,
+    "closed_over_open": 12.819478019415696,
+    "mains_uV_rms": 20.185869982018446
+   },
+   "CH12": {
+    "true_pin_minus_ref_uV_peak": 7.0178486355632455,
+    "alpha_band_uV_rms_eyes_closed": 5.03635599892288,
+    "alpha_band_uV_rms_eyes_open": 0.1966341034729847,
+    "closed_over_open": 25.612830683843292,
+    "mains_uV_rms": 20.930528286351738
+   },
+   "CH13": {
+    "true_pin_minus_ref_uV_peak": 7.18602030054287,
+    "alpha_band_uV_rms_eyes_closed": 4.439325357493543,
+    "alpha_band_uV_rms_eyes_open": 0.20861450500308168,
+    "closed_over_open": 21.28004166070794,
+    "mains_uV_rms": 19.455073778389163
+   },
+   "CH14": {
+    "true_pin_minus_ref_uV_peak": 5.601639946252156,
+    "alpha_band_uV_rms_eyes_closed": 3.7781842283154474,
+    "alpha_band_uV_rms_eyes_open": 0.2250077964159834,
+    "closed_over_open": 16.791348071026505,
+    "mains_uV_rms": 19.59752753110167
+   },
+   "CH15": {
+    "true_pin_minus_ref_uV_peak": 3.0763614071611602,
+    "alpha_band_uV_rms_eyes_closed": 2.1536668386548157,
+    "alpha_band_uV_rms_eyes_open": 0.17905627495390694,
+    "closed_over_open": 12.027876929804428,
+    "mains_uV_rms": 19.73053760158237
+   },
+   "CH16": {
+    "true_pin_minus_ref_uV_peak": 3.7760515619945836,
+    "alpha_band_uV_rms_eyes_closed": 2.7367622178632875,
+    "alpha_band_uV_rms_eyes_open": 0.20222613481216486,
+    "closed_over_open": 13.533177699337891,
+    "mains_uV_rms": 20.524161047808548
+   }
+  },
+  "packets_lost": 0,
+  "gain": 8,
+  "channels_with_alpha_3x_above_baseline": 15,
+  "best_closed_over_open": 25.612830683843292,
+  "largest_true_difference_uV": 7.18602030054287,
+  "scenario": {
+   "alpha_uv_at_peak_vs_far_reference": 20.0,
+   "bump_sigma_mm": 30.0,
+   "peak_offset_from_board_mm": 30.0,
+   "mains_common_mode_mV_rms": 1.0
+  }
+ },
+ "ble": {
+  "rows": [
+   {
+    "interval_ms": 7.5,
+    "packets_per_event": 2,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 7.5,
+    "packets_per_event": 4,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 7.5,
+    "packets_per_event": 6,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 7.5,
+    "packets_per_event": 10,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 15,
+    "packets_per_event": 2,
+    "lost_percent": 46.25333333333333
+   },
+   {
+    "interval_ms": 15,
+    "packets_per_event": 4,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 15,
+    "packets_per_event": 6,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 15,
+    "packets_per_event": 10,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 30,
+    "packets_per_event": 2,
+    "lost_percent": 72.92
+   },
+   {
+    "interval_ms": 30,
+    "packets_per_event": 4,
+    "lost_percent": 46.266666666666666
+   },
+   {
+    "interval_ms": 30,
+    "packets_per_event": 6,
+    "lost_percent": 19.613333333333333
+   },
+   {
+    "interval_ms": 30,
+    "packets_per_event": 10,
+    "lost_percent": 0.0
+   },
+   {
+    "interval_ms": 50,
+    "packets_per_event": 2,
+    "lost_percent": 83.58666666666667
+   },
+   {
+    "interval_ms": 50,
+    "packets_per_event": 4,
+    "lost_percent": 67.6
+   },
+   {
+    "interval_ms": 50,
+    "packets_per_event": 6,
+    "lost_percent": 51.61333333333334
+   },
+   {
+    "interval_ms": 50,
+    "packets_per_event": 10,
+    "lost_percent": 19.64
+   }
+  ],
+  "needed_packets_per_second": 250.0
+ },
+ "buffer": {
+  "fitted_output_resistance_ohm": 92.83177667225556,
+  "fitted_second_pole_MHz": 9.495490571862298,
+  "fit_rms_error_percent_points": 1.288807224329377,
+  "cases": {
+   "as built (R18 = 100 ohm)": {
+    "overshoot_percent": 2.472541611186997,
+    "phase_margin_deg": 72.28680485105376,
+    "crossover_kHz": 2743.6705220302442
+   },
+   "R18 = 22 ohm": {
+    "overshoot_percent": 20.22731124119377,
+    "phase_margin_deg": 58.39893560620682,
+    "crossover_kHz": 1210.0802738731654
+   },
+   "R18 = 0 (cap straight on the output)": {
+    "overshoot_percent": 132.86611945276638,
+    "phase_margin_deg": 4.343743241154016,
+    "crossover_kHz": 960.7472965907778
+   }
+  }
+ },
+ "seconds": 64.4
+}

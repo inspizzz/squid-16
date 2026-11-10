@@ -60,6 +60,8 @@ firmware/
   test/              PC-side tests of the driver against a simulated converter
 software/
   limpet16.py        record to CSV over Bluetooth
+sim/
+  run_all.py         simulate this board; results in sim/results/report.md
 ```
 
 ## Make one
@@ -105,6 +107,7 @@ then stop using the generator, because it overwrites them.
 | Firmware driver and packet code against a simulated ADS131M08 (`firmware/test/run.sh`) | pass |
 | Firmware builds for the ESP32-C3 (PlatformIO, Arduino core, NimBLE-Arduino) | builds, 753 kB flash |
 | Recorder packet decoder (`limpet16.py --selftest`) | pass |
+| Wiring traced from the PCB copper against the firmware's pins and channel order ([simulation](sim/results/report.md)) | 16 of 16 channels in the right place |
 | A manufactured board | **not done** |
 | Firmware on real hardware, Bluetooth range and throughput, noise, signal quality | **not done** |
 

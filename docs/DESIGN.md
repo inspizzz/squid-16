@@ -152,6 +152,29 @@ characteristic is different and uses its own UUID.
 | Analog supply | not documented | separate low-noise regulator |
 | Stacking connector | yes | no |
 
+## What the simulations say
+
+[`sim/results/report.md`](../sim/results/report.md) has the numbers; none of
+them is a measurement. In short:
+
+- The wiring, firmware and recorder agree: all 16 channels come out in the
+  right place at the right scale.
+- With dry contacts of 20 kOhm to 1 MOhm, gain 4 keeps about 70 % of the
+  signal and the weakest channel gets about a third of the strongest; gain 8
+  keeps about 87 % and roughly halves the noise.
+- Two parts limit mains rejection to roughly 30-35 dB: the 220 pF input
+  capacitors return to ground rather than to the driven reference node, and
+  the 10 MOhm hold resistor (R28) loads the reference pin. Changing both
+  (capacitors to REFN, 100 MOhm hold) improves the simulated figure about
+  eightfold. This is a candidate for the next revision; it has not been
+  applied to the board.
+- Because the reference pin sits inside the cluster, each channel sees only
+  the difference in scalp potential over 6 to 13 mm, a few microvolts for a
+  typical alpha rhythm, and almost nothing when the board sits right on the
+  peak of the source.
+- The reference buffer is estimated stable as built (about 70 degrees of
+  phase margin); do not reduce R18 much below 100 ohm.
+
 ## Known limits and open questions
 
 These matter more than anything else on this page if you are deciding whether

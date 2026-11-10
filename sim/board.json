@@ -1,0 +1,295 @@
+{
+ "source": "hardware/limpet16.kicad_pcb + hardware/scripts/design.py",
+ "revision": "B",
+ "electrodes": [
+  {
+   "pin": "P1",
+   "label": "CH1",
+   "xy": [
+    -3.25,
+    13.529
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 0,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P2",
+   "label": "CH2",
+   "xy": [
+    -3.25,
+    7.029
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 1,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P3",
+   "label": "CH3",
+   "xy": [
+    -8.879,
+    10.279
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 2,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P4",
+   "label": "CH4",
+   "xy": [
+    -12.129,
+    4.65
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 3,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P5",
+   "label": "CH5",
+   "xy": [
+    -12.129,
+    -1.85
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 4,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P6",
+   "label": "CH6",
+   "xy": [
+    -8.879,
+    -7.479
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 5,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P7",
+   "label": "CH7",
+   "xy": [
+    -3.25,
+    -10.729
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 6,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P8",
+   "label": "CH8",
+   "xy": [
+    -3.25,
+    -4.229
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U1",
+   "ain": 7,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P9",
+   "label": "CH9",
+   "xy": [
+    3.25,
+    13.529
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 7,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P10",
+   "label": "CH10",
+   "xy": [
+    3.25,
+    7.029
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 6,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P11",
+   "label": "CH11",
+   "xy": [
+    8.879,
+    10.279
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 5,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P12",
+   "label": "CH12",
+   "xy": [
+    12.129,
+    4.65
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 4,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P13",
+   "label": "CH13",
+   "xy": [
+    12.129,
+    -1.85
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 3,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P14",
+   "label": "CH14",
+   "xy": [
+    8.879,
+    -7.479
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 2,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P15",
+   "label": "CH15",
+   "xy": [
+    3.25,
+    -10.729
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 1,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P16",
+   "label": "CH16",
+   "xy": [
+    3.25,
+    -4.229
+   ],
+   "series_r": 4700.0,
+   "shunt_c": 2.2e-10,
+   "shunt_c_returns_to": "GND",
+   "chip": "U2",
+   "ain": 0,
+   "negative_input_net": "REFN"
+  },
+  {
+   "pin": "P17",
+   "label": "REF",
+   "xy": [
+    -6.5,
+    1.4
+   ]
+  },
+  {
+   "pin": "P18",
+   "label": "BIAS",
+   "xy": [
+    6.5,
+    1.4
+   ]
+  }
+ ],
+ "chips": {
+  "U1": {
+   "cs_gpio": 7,
+   "nets": {
+    "drdy": "DRDY_N",
+    "reset": "RESET_N",
+    "sclk": "SCLK",
+    "dout": "MISO",
+    "din": "MOSI",
+    "clkin": "ADC_CLK"
+   }
+  },
+  "U2": {
+   "cs_gpio": 6,
+   "nets": {
+    "drdy": "unconnected-(U2-~{DRDY}-Pad18)",
+    "reset": "RESET_N",
+    "sclk": "SCLK",
+    "dout": "MISO",
+    "din": "MOSI",
+    "clkin": "ADC_CLK"
+   }
+  }
+ },
+ "gpio": {
+  "sclk": 10,
+  "miso": 20,
+  "mosi": 21,
+  "drdy": 4,
+  "reset": 5,
+  "led": 3
+ },
+ "values": {
+  "r_ref_series": 10000.0,
+  "r_ref_hold": 10000000.0,
+  "r_buf_out": 100.0,
+  "c_refn": 1e-08,
+  "r_bias_top": 20000.0,
+  "r_bias_bottom": 10000.0,
+  "r_bias_series": 2200.0,
+  "c_bias": 1e-06,
+  "avdd": 3.3
+ },
+ "fitted": {
+  "R18": true,
+  "R19": false,
+  "R28": true,
+  "R20": true
+ }
+}

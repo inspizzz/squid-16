@@ -12,3 +12,4 @@ __pycache__/
 # recordings
 *.csv
 !hardware/production/*.csv
+sim/results/fw_harness
