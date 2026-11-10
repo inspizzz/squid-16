@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build hardware/limpet16.kicad_sch from design.py.
+"""Build hardware/squid16.kicad_sch from design.py.
 
 Every pin gets a short stub and a net label (a ground symbol for GND), so the
 drawing is a readable, block-by-block view of exactly the netlist the board is
@@ -16,7 +16,7 @@ from sexpr import Sym, dump, find, first, parse
 
 HW = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SYM_DIR = os.environ.get("KICAD9_SYMBOL_DIR", "/usr/share/kicad/symbols")
-OUT = os.path.join(HW, "limpet16.kicad_sch")
+OUT = os.path.join(HW, "squid16.kicad_sch")
 GRID = 1.27
 STUB = 2.54
 
@@ -196,7 +196,7 @@ class Sheet:
             s.append(prop(k, v, x, y, hide=True))
         for num in pins:
             s.append([Sym("pin"), num, [Sym("uuid"), d.uid(f"pin:{key}:{num}")]])
-        s.append([Sym("instances"), [Sym("project"), "limpet16",
+        s.append([Sym("instances"), [Sym("project"), "squid16",
                   [Sym("path"), "/" + d.ROOT_UUID, [Sym("reference"), ref], [Sym("unit"), 1]]]])
         self.items.append(s)
         return pins
@@ -283,9 +283,9 @@ def build():
     for s, x, y in NOTES:
         sh.text(s, x, y, 1.4)
 
-    root = [Sym("kicad_sch"), [Sym("version"), 20250114], [Sym("generator"), "limpet16_gen_sch"],
+    root = [Sym("kicad_sch"), [Sym("version"), 20250114], [Sym("generator"), "squid16_gen_sch"],
             [Sym("generator_version"), "9.0"], [Sym("uuid"), d.ROOT_UUID], [Sym("paper"), "A3"],
-            [Sym("title_block"), [Sym("title"), "Limpet-16: 16-channel dry-electrode EEG front end"],
+            [Sym("title_block"), [Sym("title"), "Squid-16: 16-channel dry-electrode EEG front end"],
              [Sym("rev"), d.REVISION], [Sym("company"), "Open hardware, CERN-OHL-P-2.0"],
              [Sym("comment"), 1, "Generated from hardware/scripts/design.py. Edit that file, not this one."],
              [Sym("comment"), 2, "Untested revision. Not a medical device."]],

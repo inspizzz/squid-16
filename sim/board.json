@@ -1,5 +1,5 @@
 {
- "source": "hardware/limpet16.kicad_pcb + hardware/scripts/design.py",
+ "source": "hardware/squid16.kicad_pcb + hardware/scripts/design.py",
  "revision": "B",
  "electrodes": [
   {

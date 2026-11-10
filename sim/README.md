@@ -1,4 +1,4 @@
-# Simulating Limpet-16
+# Simulating Squid-16
 
 A model of this specific board, built from its own files, that can be run
 before any hardware exists. **Results: [`results/report.md`](results/report.md).**

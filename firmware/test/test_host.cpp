@@ -8,8 +8,8 @@
 #include <cstdio>
 #include <cstring>
 
-#include "../limpet16/src/ads131m08.h"
-#include "../limpet16/src/protocol.h"
+#include "../squid16/src/ads131m08.h"
+#include "../squid16/src/protocol.h"
 
 struct SimAdc {
   uint16_t reg[64] = {0};
@@ -83,18 +83,18 @@ int main() {
   CHECK(a.read_samples(ra) == 0x0500);
   b.read_samples(rb);
   for (int k = 0; k < 8; k++) CHECK(ra[k] == -(100 + k) && rb[k] == 200 + k);
-  limpet::order_channels(ra, rb, ch);
+  squid::order_channels(ra, rb, ch);
   CHECK(ch[0] == -100);    // channel 1  = ADC A AIN0
   CHECK(ch[7] == -107);    // channel 8  = ADC A AIN7
   CHECK(ch[8] == 207);     // channel 9  = ADC B AIN7
   CHECK(ch[15] == 200);    // channel 16 = ADC B AIN0
 
-  uint8_t pkt[limpet::kPacketBytes];
-  limpet::build_packet(0x42, ch, pkt);
+  uint8_t pkt[squid::kPacketBytes];
+  squid::build_packet(0x42, ch, pkt);
   CHECK(sizeof(pkt) == 51 && pkt[0] == 0xA0 && pkt[1] == 0x42 && pkt[50] == 0xC0);
   CHECK(pkt[2] == 0xFF && pkt[3] == 0xFF && pkt[4] == 0x9C);          // -100
   CHECK(pkt[47] == 0x00 && pkt[48] == 0x00 && pkt[49] == 200);
-  double uv = limpet::microvolts_per_count(4);
+  double uv = squid::microvolts_per_count(4);
   CHECK(uv > 0.03576 && uv < 0.03577);
   CHECK(ads131::kSampleRateHz == 250.0);
   printf("all firmware host tests passed (%d + %d simulated frames)\n", simA.frames, simB.frames);

@@ -1,4 +1,4 @@
-Limpet-16 is open source. Different parts carry different licences:
+Squid-16 is open source. Different parts carry different licences:
 
   hardware/   CERN Open Hardware Licence Version 2 - Permissive
               (CERN-OHL-P-2.0), see LICENSES/CERN-OHL-P-2.0.txt
@@ -11,12 +11,12 @@ Limpet-16 is open source. Different parts carry different licences:
   docs/       Creative Commons Attribution 4.0 International (CC-BY-4.0),
   README.md   see LICENSES/CC-BY-4.0.txt
 
-Exception: hardware/lib/limpet16.pretty/ESP32-C3-WROOM-02_NoVias.kicad_mod is a
+Exception: hardware/lib/squid16.pretty/ESP32-C3-WROOM-02_NoVias.kicad_mod is a
 modified copy of a footprint from the KiCad footprint library, copyright the
 KiCad library contributors. It remains under that library's licence,
 CC-BY-SA 4.0 with the KiCad library exception (https://www.kicad.org/libraries/license/).
 
-Copyright (c) 2026 Limpet-16 contributors.
+Copyright (c) 2026 Squid-16 contributors.
 
 You may make, modify, sell and redistribute this design. It comes with no
 warranty of any kind. It is NOT a medical device.

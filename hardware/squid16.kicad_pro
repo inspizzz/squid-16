@@ -1,0 +1,135 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {
+        "zones": {
+          "min_clearance": 0.2
+        }
+      },
+      "rules": {
+        "min_clearance": 0.127,
+        "min_track_width": 0.127,
+        "min_via_diameter": 0.45,
+        "min_via_annular_width": 0.1,
+        "min_through_hole_diameter": 0.3,
+        "min_hole_clearance": 0.2,
+        "min_hole_to_hole": 0.25,
+        "min_copper_edge_clearance": 0.3,
+        "min_silk_clearance": 0.0,
+        "solder_mask_to_copper_clearance": 0.0,
+        "min_text_height": 0.5,
+        "min_text_thickness": 0.08
+      },
+      "track_widths": [
+        0.0,
+        0.15,
+        0.3
+      ],
+      "via_dimensions": [
+        {
+          "diameter": 0.0,
+          "drill": 0.0
+        },
+        {
+          "diameter": 0.5,
+          "drill": 0.3
+        }
+      ],
+      "rule_severities": {
+        "lib_footprint_issues": "ignore",
+        "lib_footprint_mismatch": "ignore",
+        "silk_overlap": "ignore",
+        "silk_over_copper": "ignore",
+        "silk_edge_clearance": "ignore"
+      }
+    }
+  },
+  "net_settings": {
+    "classes": [
+      {
+        "name": "Default",
+        "clearance": 0.127,
+        "track_width": 0.15,
+        "via_diameter": 0.5,
+        "via_drill": 0.3,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "diff_pair_width": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "bus_width": 12,
+        "wire_width": 6,
+        "line_style": 0,
+        "priority": 2147483647,
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)"
+      },
+      {
+        "name": "Power",
+        "clearance": 0.127,
+        "track_width": 0.3,
+        "via_diameter": 0.5,
+        "via_drill": 0.3,
+        "microvia_diameter": 0.3,
+        "microvia_drill": 0.1,
+        "diff_pair_width": 0.2,
+        "diff_pair_gap": 0.25,
+        "diff_pair_via_gap": 0.25,
+        "bus_width": 12,
+        "wire_width": 6,
+        "line_style": 0,
+        "priority": 0,
+        "pcb_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgba(0, 0, 0, 0.000)"
+      }
+    ],
+    "meta": {
+      "version": 4
+    },
+    "netclass_patterns": [
+      {
+        "netclass": "Power",
+        "pattern": "+5V"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "+3V3"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "AVDD"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "DVDD"
+      },
+      {
+        "netclass": "Power",
+        "pattern": "GND"
+      }
+    ]
+  },
+  "erc": {
+    "rule_severities": {
+      "lib_symbol_issues": "ignore",
+      "lib_symbol_mismatch": "ignore",
+      "footprint_link_issues": "ignore"
+    }
+  },
+  "libraries": {
+    "pinned_footprint_libs": [
+      "squid16"
+    ],
+    "pinned_symbol_libs": []
+  },
+  "meta": {
+    "filename": "squid16.kicad_pro",
+    "version": 3
+  },
+  "sheets": [
+    [
+      "5a6fd270-1532-597d-bcd2-da1e87e01b17",
+      "Root"
+    ]
+  ]
+}

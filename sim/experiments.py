@@ -14,21 +14,21 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 RES = os.path.join(HERE, "results")
 sys.path.insert(0, os.path.join(ROOT, "software"))
-import limpet16 as host  # noqa: E402  the real recorder's decoder
+import squid16 as host  # noqa: E402  the real recorder's decoder
 
 Z_RANGE = (20e3, 1e6)        # [assumed] dry-pin contact impedance, log-uniform
 
 
 # ------------------------------------------------------------------ helpers
 def firmware_pins():
-    src = open(os.path.join(ROOT, "firmware", "limpet16", "src", "main.cpp")).read()
+    src = open(os.path.join(ROOT, "firmware", "squid16", "src", "main.cpp")).read()
     return {k: int(v) for k, v in re.findall(r"static const int (PIN_\w+) = (\d+);", src)}
 
 
 def build_harness():
     exe = os.path.join(RES, "fw_harness")
     subprocess.run(["g++", "-std=c++17", "-O1", "-Wall", "-o", exe, os.path.join(HERE, "fw_harness.cpp"),
-                    os.path.join(ROOT, "firmware", "limpet16", "src", "ads131m08.cpp")], check=True)
+                    os.path.join(ROOT, "firmware", "squid16", "src", "ads131m08.cpp")], check=True)
     return exe
 
 

@@ -1,5 +1,5 @@
 // Runs the board's real firmware code on a PC: the ADS131M08 driver
-// (firmware/limpet16/src/ads131m08.cpp) and the packet/channel-order code
+// (firmware/squid16/src/ads131m08.cpp) and the packet/channel-order code
 // (protocol.h) talk to two simulated converters. main.cpp itself (interrupts,
 // Bluetooth, FreeRTOS) is NOT run here.
 //
@@ -13,8 +13,8 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "../firmware/limpet16/src/ads131m08.h"
-#include "../firmware/limpet16/src/protocol.h"
+#include "../firmware/squid16/src/ads131m08.h"
+#include "../firmware/squid16/src/protocol.h"
 
 struct SimAdc {
   uint16_t reg[64];
@@ -54,16 +54,16 @@ int main(int argc, char **argv) {
   if (!a.configure(gain_code, ads131::kOsrMax, 5) || !b.configure(gain_code, ads131::kOsrMax, 5)) return 4;
   fprintf(stderr, "configured: CLOCK=0x%04X GAIN1=0x%04X GAIN2=0x%04X DCBLOCK=0x%04X\n",
           simA.reg[3], simA.reg[4], simA.reg[5], simA.reg[8]);
-  int32_t in[16], ra[8], rb[8], ch[limpet::kChannels];
-  uint8_t pkt[limpet::kPacketBytes];
+  int32_t in[16], ra[8], rb[8], ch[squid::kChannels];
+  uint8_t pkt[squid::kPacketBytes];
   uint8_t counter = 0;
   while (fread(in, sizeof(int32_t), 16, stdin) == 16) {
     memcpy(simA.sample, in, sizeof(simA.sample));
     memcpy(simB.sample, in + 8, sizeof(simB.sample));
     a.read_samples(ra);
     b.read_samples(rb);
-    limpet::order_channels(ra, rb, ch);
-    limpet::build_packet(counter++, ch, pkt);
+    squid::order_channels(ra, rb, ch);
+    squid::build_packet(counter++, ch, pkt);
     fwrite(pkt, 1, sizeof(pkt), stdout);
   }
   return 0;

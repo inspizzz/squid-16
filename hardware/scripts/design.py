@@ -1,4 +1,4 @@
-"""Limpet-16 revision B: single source of truth for the design.
+"""Squid-16 revision B: single source of truth for the design.
 
 Every part, every net and every placement lives in this file.
 gen_sch.py turns it into the KiCad schematic, gen_pcb.py into the board.
@@ -103,7 +103,7 @@ MODULE_ANTENNA_FROM_CENTRE = 7.1     # antenna section starts this far above the
 MODULE_BODY = (-9.0, 9.0, -6.9, 13.1)  # x0, x1, y0, y1 relative to the centre
 
 add("U5", "RF_Module:ESP32-C3-WROOM-02", "ESP32-C3-WROOM-02",
-    "limpet16:ESP32-C3-WROOM-02_NoVias",
+    "squid16:ESP32-C3-WROOM-02_NoVias",
     {"1": "+3V3", "2": "EN", "3": "DRDY_N", "4": "RESET_N", "5": "CS2_N", "6": "CS1_N",
      "7": "IO8", "8": "BOOT", "9": "GND", "10": "SCLK", "11": "MISO", "12": "MOSI",
      "13": "USB_DN", "14": "USB_DP", "15": "LED", "16": "IO2", "17": None, "18": None,
@@ -211,7 +211,7 @@ for _ref, _avdd, _dvdd, _cap, _refin in (("U1", "C20", "C21", "C22", "C23"),
     C(_cap, "220n", f"CAP_{_ref}", "GND", near(_ref, 3.85, 4.9))
 
 # ---- electrodes and input filters -------------------------------------------
-POGO = "limpet16:PogoPin_MillMax_0845_SMD"
+POGO = "squid16:PogoPin_MillMax_0845_SMD"
 # Each input's resistor and capacitor stand side by side on an arc around the
 # converter, pointing at it. Angle (degrees, about U1's centre) per ADC input:
 FILTER_ANGLE = [92, 113.5, 136, 160, 184, 208, 244.5, 266]

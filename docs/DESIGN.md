@@ -1,7 +1,7 @@
-# How Limpet-16 works (revision B)
+# How Squid-16 works (revision B)
 
-Schematic: [PDF](../hardware/production/limpet16-schematic.pdf),
-[SVG](img/schematic.svg), or open `hardware/limpet16.kicad_sch` in KiCad.
+Schematic: [PDF](../hardware/production/squid16-schematic.pdf),
+[SVG](img/schematic.svg), or open `hardware/squid16.kicad_sch` in KiCad.
 
 ## Signal path
 
@@ -98,9 +98,9 @@ and channel n+8 is the mirror image of channel n. The cluster is centred
 
 Channel n is ADC A input n-1 for n = 1..8 and ADC B input 16-n for n = 9..16
 (ADC B is mounted turned round). The firmware puts them in order;
-`firmware/limpet16/src/protocol.h`.
+`firmware/squid16/src/protocol.h`.
 
-![Pin side, as you see it looking at the pins](img/limpet16-bottom.png)
+![Pin side, as you see it looking at the pins](img/squid16-bottom.png)
 
 ## Options you can solder
 
@@ -118,7 +118,7 @@ buffer's noise.
 
 | | |
 |---|---|
-| Name | `Limpet-16-XXXX` |
+| Name | `Squid-16-XXXX` |
 | Service | `4fafc201-1fb5-459e-8fcc-c5c9c331914b` |
 | Data, notify | `beb5483e-36e1-4688-b7f5-ea07361b26a8` |
 | Command, write + notify | `6c696d70-6574-4c31-9601-000000000001` |
@@ -141,7 +141,7 @@ characteristic is different and uses its own UUID.
 
 ## How it differs from the board that inspired it
 
-| | PiEEG Octopus 16 (from its public docs) | Limpet-16 rev B |
+| | PiEEG Octopus 16 (from its public docs) | Squid-16 rev B |
 |---|---|---|
 | Design files and licence | not published | all here, CERN-OHL-P / MIT |
 | Processor | plug-in XIAO ESP32-S3 on sockets | ESP32-C3 module soldered on |
@@ -251,4 +251,4 @@ inputs are joined by a hand-placed spine under each converter so the positive
 inputs can fan out freely. The result is checked by KiCad's DRC, not by the
 router.
 
-![Top copper](img/limpet16-top.png)
+![Top copper](img/squid16-top.png)

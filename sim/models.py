@@ -1,4 +1,4 @@
-"""Models of the Limpet-16 signal chain.
+"""Models of the Squid-16 signal chain.
 
 Every number is tagged in a comment as one of
     [board]      read from the PCB / design.py via board.json

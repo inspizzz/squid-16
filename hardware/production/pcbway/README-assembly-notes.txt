@@ -1,13 +1,13 @@
-LIMPET-16 revision B - notes for fabrication and assembly
+SQUID-16 revision B - notes for fabrication and assembly
 ================================================================
 
 FILES
-  limpet16-gerbers.zip         Gerbers (RS-274X) and Excellon drill, 4 layers
-  limpet16-bom.csv             Bill of materials with manufacturer part numbers
-  limpet16-centroid-top.csv    Pick and place, top side
-  limpet16-centroid-bottom.csv Pick and place, bottom side (18 spring pins, see OPTION B)
-  limpet16-assembly-top.pdf    Assembly drawing with reference designators
-  limpet16-schematic.pdf       Schematic, for reference
+  squid16-gerbers.zip         Gerbers (RS-274X) and Excellon drill, 4 layers
+  squid16-bom.csv             Bill of materials with manufacturer part numbers
+  squid16-centroid-top.csv    Pick and place, top side
+  squid16-centroid-bottom.csv Pick and place, bottom side (18 spring pins, see OPTION B)
+  squid16-assembly-top.pdf    Assembly drawing with reference designators
+  squid16-schematic.pdf       Schematic, for reference
 
 BARE BOARD
   Layers ............ 4   (stack order: F_Cu, In1_Cu, In2_Cu, B_Cu)

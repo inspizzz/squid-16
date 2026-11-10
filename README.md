@@ -1,13 +1,13 @@
 <div align="center">
 
-# Limpet-16
+# Squid-16
 
 **An open-source, 16-channel dry-electrode EEG sensor on one 40 mm board.**
 
 Eighteen spring-loaded pins, two 24-bit converters, an on-board ESP32-C3 and Bluetooth LE.
 No gel, no cap, no separate controller.
 
-<img src="docs/img/hero.png" alt="3D render of the Limpet-16 board: component side and electrode side" width="900">
+<img src="docs/img/hero.png" alt="3D render of the Squid-16 board: component side and electrode side" width="900">
 
 <sub>3D render from the design files, not a photograph. No board has been built yet.</sub>
 
@@ -45,7 +45,7 @@ No gel, no cap, no separate controller.
 | Board | 40 mm round, 4 layers, 1.0 mm thick; parts on top, pins underneath |
 | Power and flashing | USB-C on the board, 5 V from a power bank |
 
-Limpet-16 is an independent design inspired by the PiEEG "Octopus 16" idea of
+Squid-16 is an independent design inspired by the PiEEG "Octopus 16" idea of
 putting the whole montage, reference included, on one small board. It shares no
 design files or code with that product (which publishes neither schematics nor
 a licence); it is drawn from the component datasheets. Its data stream uses the
@@ -69,32 +69,32 @@ docs/
   DESIGN.md          how the circuit works, pin maps, limits, open questions
   img/               renders and layer pictures
 hardware/
-  limpet16.kicad_pro / .kicad_sch / .kicad_pcb    open these in KiCad 9
+  squid16.kicad_pro / .kicad_sch / .kicad_pcb    open these in KiCad 9
   lib/               the two project footprints (spring pin, radio module) and a 3D model of the pin
   production/        ready-to-upload gerbers, BOM, placement files, schematic PDF
   scripts/           the design as code: one file in, schematic + board out
 firmware/
-  limpet16/          PlatformIO project for the on-board ESP32-C3
+  squid16/          PlatformIO project for the on-board ESP32-C3
   test/              PC-side tests of the driver against a simulated converter
 software/
-  limpet16.py        record to CSV over Bluetooth
+  squid16.py        record to CSV over Bluetooth
 sim/
   run_all.py         simulate this board; results in sim/results/report.md
 ```
 
 ## Get one
 
-**Nobody sells built Limpet-16 boards.** This is a design you have made for
+**Nobody sells built Squid-16 boards.** This is a design you have made for
 you. There are three ways to end up holding one:
 
 | Route | What you do | Skill needed |
 |---|---|---|
-| **Have it built** (easiest) | Upload [`hardware/production/limpet16-pcbway.zip`](hardware/production/limpet16-pcbway.zip) to a turnkey assembler such as PCBWay. It contains the gerbers, a parts list with manufacturer part numbers, placement files and a notes file. They make the board, buy the parts and solder them. You flash the firmware over USB-C. | None beyond placing an order |
+| **Have it built** (easiest) | Upload [`hardware/production/squid16-pcbway.zip`](hardware/production/squid16-pcbway.zip) to a turnkey assembler such as PCBWay. It contains the gerbers, a parts list with manufacturer part numbers, placement files and a notes file. They make the board, buy the parts and solder them. You flash the firmware over USB-C. | None beyond placing an order |
 | **Have the top side built, fit the pins yourself** | Same package, ask for top side only. Solder the 18 spring pins with an ordinary iron (one large pad each). | Basic soldering |
 | **Build it all yourself** | Order bare boards from the gerbers and follow [docs/BUILD.md](docs/BUILD.md). | Fine-pitch surface-mount soldering, hot air |
 
-After that: plug in USB-C, run `pio run -t upload` in `firmware/limpet16`,
-power it from a power bank and run `python3 software/limpet16.py`.
+After that: plug in USB-C, run `pio run -t upload` in `firmware/squid16`,
+power it from a power bank and run `python3 software/squid16.py`.
 [docs/BUILD.md](docs/BUILD.md) has every step.
 
 If you would rather buy a finished unit, open an issue saying so. There is no
@@ -158,7 +158,7 @@ then stop using the generator, because it overwrites them.
 | Rebuilding the board from `design.py` gives a complete board every time | **no**: 1 of 3 attempts; the committed board is the complete one |
 | Firmware driver and packet code against a simulated ADS131M08 (`firmware/test/run.sh`) | pass |
 | Firmware builds for the ESP32-C3 (PlatformIO, Arduino core, NimBLE-Arduino) | builds, 753 kB flash |
-| Recorder packet decoder (`limpet16.py --selftest`) | pass |
+| Recorder packet decoder (`squid16.py --selftest`) | pass |
 | Wiring traced from the PCB copper against the firmware's pins and channel order ([simulation](sim/results/report.md)) | 16 of 16 channels in the right place |
 | A manufactured board | **not done** |
 | Firmware on real hardware, Bluetooth range and throughput, noise, signal quality | **not done** |

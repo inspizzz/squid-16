@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build hardware/limpet16.kicad_pcb (placed, unrouted) from design.py.
+"""Build hardware/squid16.kicad_pcb (placed, unrouted) from design.py.
 
 Run with the Python that ships KiCad's `pcbnew` module (KiCad 9):
     python3 scripts/gen_pcb.py
@@ -18,7 +18,7 @@ import gen_sch
 
 HW = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KICAD_FP = os.environ.get("KICAD9_FOOTPRINT_DIR", "/usr/share/kicad/footprints")
-OUT = os.path.join(HW, "limpet16.kicad_pcb")
+OUT = os.path.join(HW, "squid16.kicad_pcb")
 MM = pcbnew.FromMM
 
 
@@ -29,7 +29,7 @@ def P(x, y):
 
 def load_fp(fpid):
     lib, name = fpid.split(":")
-    path = os.path.join(HW, "lib", lib + ".pretty") if lib == "limpet16" \
+    path = os.path.join(HW, "lib", lib + ".pretty") if lib == "squid16" \
         else os.path.join(KICAD_FP, lib + ".pretty")
     fp = pcbnew.FootprintLoad(path, name)
     if fp is None:
@@ -109,11 +109,11 @@ def write_project():
         },
         "erc": {"rule_severities": {"lib_symbol_issues": "ignore", "lib_symbol_mismatch": "ignore",
                                     "footprint_link_issues": "ignore"}},
-        "libraries": {"pinned_footprint_libs": ["limpet16"], "pinned_symbol_libs": []},
-        "meta": {"filename": "limpet16.kicad_pro", "version": 3},
+        "libraries": {"pinned_footprint_libs": ["squid16"], "pinned_symbol_libs": []},
+        "meta": {"filename": "squid16.kicad_pro", "version": 3},
         "sheets": [[d.ROOT_UUID, "Root"]],
     }
-    with open(os.path.join(HW, "limpet16.kicad_pro"), "w") as f:
+    with open(os.path.join(HW, "squid16.kicad_pro"), "w") as f:
         json.dump(pro, f, indent=2)
 
 
@@ -190,9 +190,9 @@ def build():
     text(board, "BIAS", -17.6, -2.7, F, 0.6)
     text(board, "BOOT", -13.4, 4.6, F, 0.5)
     text(board, "GND", -13.3, 2.7, F, 0.5)
-    text(board, f"LIMPET-16 r{d.REVISION}", 0, -1.0, F, 0.6)
+    text(board, f"SQUID-16 r{d.REVISION}", 0, -1.0, F, 0.6)
     cx, cy = d.CLUSTER
-    text(board, "LIMPET", cx, cy + 0.5, B, 0.55, mirror=True)
+    text(board, "SQUID", cx, cy + 0.5, B, 0.55, mirror=True)
     text(board, f"16 r{d.REVISION}", cx, cy - 0.5, B, 0.55, mirror=True)
     r_lab_out = d.R_OUTER + 2.95
     for name in d.ELECTRODES:

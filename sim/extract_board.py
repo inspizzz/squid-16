@@ -2,7 +2,7 @@
 """Read the routed board file and write sim/board.json.
 
 Everything the simulator knows about the wiring comes from the copper in
-hardware/limpet16.kicad_pcb, traced net by net:
+hardware/squid16.kicad_pcb, traced net by net:
     spring pin -> series resistor -> converter pin -> which converter
                -> its chip-select net -> which module pin -> which GPIO
 Component values come from hardware/scripts/design.py. The pin tables below
@@ -46,7 +46,7 @@ def value(text):
 
 
 def main():
-    board = pcbnew.LoadBoard(os.path.join(ROOT, "hardware", "limpet16.kicad_pcb"))
+    board = pcbnew.LoadBoard(os.path.join(ROOT, "hardware", "squid16.kicad_pcb"))
     ox, oy = d.ORIGIN
     parts, net_pads = {}, {}
     for fp in board.GetFootprints():
@@ -110,7 +110,7 @@ def main():
     assert p("R22") == {"VBIAS", "EL_BIAS"} and p("C30") == {"VBIAS", "GND"}
     assert parts["U4"]["pads"]["3"] == "REF_BUF_IN" and parts["U4"]["pads"]["1"] == parts["U4"]["pads"]["4"] == "REF_BUF"
     out = {
-        "source": "hardware/limpet16.kicad_pcb + hardware/scripts/design.py",
+        "source": "hardware/squid16.kicad_pcb + hardware/scripts/design.py",
         "revision": d.REVISION,
         "electrodes": electrodes,
         "chips": chips,

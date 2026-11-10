@@ -1,4 +1,4 @@
-# Building a Limpet-16
+# Building a Squid-16
 
 Read the safety note first, then work down the page.
 
@@ -33,7 +33,7 @@ route.
 
 ## 2. Order the board
 
-Upload [`hardware/production/limpet16-gerbers.zip`](../hardware/production/limpet16-gerbers.zip)
+Upload [`hardware/production/squid16-gerbers.zip`](../hardware/production/squid16-gerbers.zip)
 to a board house and choose:
 
 | Setting | Value |
@@ -62,7 +62,7 @@ overhangs the board edge on purpose.
 The spring pins are not in the assembly files; you solder those.
 
 **Ordering from PCBWay or another turnkey assembler:** upload the contents of
-[`hardware/production/limpet16-pcbway.zip`](../hardware/production/limpet16-pcbway.zip).
+[`hardware/production/squid16-pcbway.zip`](../hardware/production/squid16-pcbway.zip).
 It holds the gerbers, a BOM with manufacturer part numbers, pick-and-place
 files for both sides, the assembly drawing and a notes file for the assembler
 (board specification, the deliberate module overhang, polarity marks, and a
@@ -73,7 +73,7 @@ request to quote with and without the spring pins). Regenerate it with
 
 The board has no part numbers printed on it (there is no room). Use the
 assembly drawing to find R18, U3 and the rest:
-[picture](img/assembly-top.png), [PDF](../hardware/production/limpet16-assembly-top.pdf).
+[picture](img/assembly-top.png), [PDF](../hardware/production/squid16-assembly-top.pdf).
 
 ![Assembly drawing, top side](img/assembly-top.png)
 
@@ -119,7 +119,7 @@ Board off the head, USB-C data cable to a computer.
 
 ```
 pip install platformio
-cd firmware/limpet16
+cd firmware/squid16
 pio run -t upload
 pio device monitor
 ```
@@ -150,7 +150,7 @@ with a low-current mode.
 
 ```
 pip install bleak
-python3 software/limpet16.py --seconds 30 --out test.csv
+python3 software/squid16.py --seconds 30 --out test.csv
 ```
 
 1. **On the bench:** short all pins together with foil. Every channel should be

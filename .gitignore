@@ -5,7 +5,7 @@ hardware/*.kicad_prl
 hardware/*.lck
 hardware/.previous.kicad_pcb
 # PlatformIO
-firmware/limpet16/.pio/
+firmware/squid16/.pio/
 # Python
 __pycache__/
 *.pyc

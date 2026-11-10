@@ -2,7 +2,7 @@
 """Assemble the order package for PCBWay (or any turnkey assembler).
 
 Run scripts/export.sh first, then:
-    python3 scripts/pcbway.py        # -> production/pcbway/ and production/limpet16-pcbway.zip
+    python3 scripts/pcbway.py        # -> production/pcbway/ and production/squid16-pcbway.zip
 
 Writes: gerbers zip, BOM with manufacturer part numbers, centroid (pick and
 place) files, the assembly drawing and a notes file for the assembler.
@@ -73,16 +73,16 @@ def bom_rows():
     return rows
 
 
-NOTES = """LIMPET-16 revision {rev} - notes for fabrication and assembly
+NOTES = """SQUID-16 revision {rev} - notes for fabrication and assembly
 ================================================================
 
 FILES
-  limpet16-gerbers.zip         Gerbers (RS-274X) and Excellon drill, 4 layers
-  limpet16-bom.csv             Bill of materials with manufacturer part numbers
-  limpet16-centroid-top.csv    Pick and place, top side
-  limpet16-centroid-bottom.csv Pick and place, bottom side (18 spring pins, see OPTION B)
-  limpet16-assembly-top.pdf    Assembly drawing with reference designators
-  limpet16-schematic.pdf       Schematic, for reference
+  squid16-gerbers.zip         Gerbers (RS-274X) and Excellon drill, 4 layers
+  squid16-bom.csv             Bill of materials with manufacturer part numbers
+  squid16-centroid-top.csv    Pick and place, top side
+  squid16-centroid-bottom.csv Pick and place, bottom side (18 spring pins, see OPTION B)
+  squid16-assembly-top.pdf    Assembly drawing with reference designators
+  squid16-schematic.pdf       Schematic, for reference
 
 BARE BOARD
   Layers ............ 4   (stack order: F_Cu, In1_Cu, In2_Cu, B_Cu)
@@ -149,13 +149,13 @@ def main():
     os.makedirs(OUT)
     # gerbers: the fabrication layers and drill only (no drill-map drawing)
     gdir = os.path.join(PROD, "gerbers")
-    with zipfile.ZipFile(os.path.join(OUT, "limpet16-gerbers.zip"), "w", zipfile.ZIP_DEFLATED) as z:
+    with zipfile.ZipFile(os.path.join(OUT, "squid16-gerbers.zip"), "w", zipfile.ZIP_DEFLATED) as z:
         for f in sorted(os.listdir(gdir)):
             if "drl_map" in f or f.endswith(".gbrjob"):
                 continue
             z.write(os.path.join(gdir, f), f)
     rows = bom_rows()
-    with open(os.path.join(OUT, "limpet16-bom.csv"), "w", newline="") as f:
+    with open(os.path.join(OUT, "squid16-bom.csv"), "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["Item", "Qty per board", "Designators", "Manufacturer", "Mfg Part #", "Value",
                     "Description", "Package", "Type", "Side", "Substitution"])
@@ -166,7 +166,7 @@ def main():
     for side in ("top", "bottom"):
         n = 0
         with open(os.path.join(PROD, f"positions-{side}.csv")) as f, \
-                open(os.path.join(OUT, f"limpet16-centroid-{side}.csv"), "w", newline="") as g:
+                open(os.path.join(OUT, f"squid16-centroid-{side}.csv"), "w", newline="") as g:
             w = csv.writer(g)
             w.writerow(["Designator", "Value", "Package", "Mid X (mm)", "Mid Y (mm)", "Rotation (deg)", "Layer"])
             for row in csv.DictReader(f):
@@ -175,7 +175,7 @@ def main():
                                 row["Rot"], "Top" if side == "top" else "Bottom"])
                     n += 1
         counts[side] = n
-    for name in ("limpet16-assembly-top.pdf", "limpet16-schematic.pdf"):
+    for name in ("squid16-assembly-top.pdf", "squid16-schematic.pdf"):
         shutil.copy(os.path.join(PROD, name), os.path.join(OUT, name))
     with open(os.path.join(OUT, "README-assembly-notes.txt"), "w") as f:
         f.write(NOTES.format(rev=d.REVISION))
@@ -183,7 +183,7 @@ def main():
     in_bom = [r for row in rows for r in row[1].split(",")]
     assert sorted(in_bom) == sorted(fitted), set(in_bom) ^ fitted
     assert counts["top"] + counts["bottom"] == len(fitted), (counts, len(fitted))
-    zpath = os.path.join(PROD, "limpet16-pcbway.zip")
+    zpath = os.path.join(PROD, "squid16-pcbway.zip")
     if os.path.exists(zpath):
         os.remove(zpath)
     with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as z:

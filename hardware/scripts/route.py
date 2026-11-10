@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Route hardware/limpet16.kicad_pcb.
+"""Route hardware/squid16.kicad_pcb.
 
 A small self-contained grid router (A* on a 0.0625 mm grid, with rip-up and
 re-route) so the board can be rebuilt from design.py with nothing but KiCad
@@ -25,7 +25,7 @@ import design as d
 import gen_pcb
 
 HW = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PCB = os.path.join(HW, "limpet16.kicad_pcb")
+PCB = os.path.join(HW, "squid16.kicad_pcb")
 # NOTE: the result is not the same on every rebuild. Each board that
 # gen_pcb.py writes routes a little differently (the cause has not been pinned
 # down; parts are now read in reference order below, which may or may not be
@@ -33,7 +33,7 @@ PCB = os.path.join(HW, "limpet16.kicad_pcb")
 # full attempts on the committed design, one did. The committed .kicad_pcb is
 # that one. If this script reports unrouted connections, run gen_pcb.py and
 # this script again, or nudge a part in design.py.
-OUT_PCB = os.environ.get("LIMPET_ROUTE_OUT", PCB)   # where to save (default: in place)
+OUT_PCB = os.environ.get("SQUID_ROUTE_OUT", PCB)   # where to save (default: in place)
 
 G = 0.0625                      # grid pitch, mm
 HALF = d.BOARD_DIAMETER / 2
