@@ -3,7 +3,7 @@
   (generator "pcbnew")
   (generator_version "9.0")
   (layer "F.Cu")
-  (descr "ESP32-C3-WROOM-02 land pattern from the KiCad library with the 12 thermal vias in the centre pad removed (they would come out through the electrode pads on the other side).")
+  (descr "ESP32-C3-WROOM-02 land pattern from the KiCad library with the 12 thermal vias in the centre pad removed (they would come out through the electrode pads on the other side). Derived from the KiCad footprint library (RF_Module:ESP32-C3-WROOM-02), copyright the KiCad library contributors, licensed CC-BY-SA 4.0 with the KiCad library exception; this modified file is under the same licence.")
   (tags "ESP32-C3 WROOM-02 espressif")
   (property "Reference" "REF**"
     (at -10.5 5.13 90)

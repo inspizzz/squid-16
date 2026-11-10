@@ -1,20 +1,34 @@
+<div align="center">
+
 # Limpet-16
 
-An open-source, 16-channel dry-electrode EEG front end on one 40 mm board.
-Eighteen spring-loaded pins press on one spot of the scalp, two 24-bit
-converters digitise them, and an on-board ESP32-C3 radio module streams the
-samples over Bluetooth LE. Power and programming go through one USB-C socket.
+**An open-source, 16-channel dry-electrode EEG sensor on one 40 mm board.**
 
-![Top side](docs/img/board-top.png)
+Eighteen spring-loaded pins, two 24-bit converters, an on-board ESP32-C3 and Bluetooth LE.
+No gel, no cap, no separate controller.
+
+<img src="docs/img/hero.png" alt="3D render of the Limpet-16 board: component side and electrode side" width="900">
+
+<sub>3D render from the design files, not a photograph. No board has been built yet.</sub>
+
+[![Hardware: CERN-OHL-P-2.0](https://img.shields.io/badge/hardware-CERN--OHL--P--2.0-blue)](LICENSES/CERN-OHL-P-2.0.txt)
+[![Code: MIT](https://img.shields.io/badge/code-MIT-green)](LICENSES/MIT.txt)
+[![Status: revision B, untested](https://img.shields.io/badge/status-rev%20B%2C%20untested-orange)](#what-has-been-verified)
+[![Made with KiCad 9](https://img.shields.io/badge/made%20with-KiCad%209-informational)](hardware)
+
+[Build one](docs/BUILD.md) · [How it works](docs/DESIGN.md) · [Simulation results](sim/results/report.md) · [Get one](#get-one) · [Cost](#what-it-costs)
+
+</div>
 
 > **Not a medical device.** This is an experimenter's board. It has no
 > isolation from its power supply: wear it only while it runs from a battery or
 > power bank, never while it is connected to a computer or a wall charger.
 
 > **Status: revision B, not yet built.** The design passes KiCad's electrical
-> and design-rule checks and the firmware compiles and passes its PC-side
-> tests, but no board has been manufactured or powered. Expect to debug. There
-> are no measured noise or performance figures yet. See
+> and design-rule checks, the firmware compiles and passes its PC-side tests,
+> and the wiring has been checked in simulation, but no board has been
+> manufactured or powered. Expect to debug. There are no measured noise or
+> performance figures yet. See
 > [what has and has not been verified](#what-has-been-verified).
 
 ## What it is
@@ -38,6 +52,10 @@ a licence); it is drawn from the component datasheets. Its data stream uses the
 same packet layout, so viewers written for that format can read it.
 [How it differs](docs/DESIGN.md#how-it-differs-from-the-board-that-inspired-it).
 
+This project is not affiliated with, endorsed by or supported by PiEEG.
+"PiEEG" and "Octopus 16" are names used by their owner and appear here only
+to say what inspired this design.
+
 Revision A (32 mm, with a plug-in Seeed XIAO ESP32-S3 instead of an on-board
 module) is kept under the git tag `rev-A`.
 
@@ -52,7 +70,7 @@ docs/
   img/               renders and layer pictures
 hardware/
   limpet16.kicad_pro / .kicad_sch / .kicad_pcb    open these in KiCad 9
-  lib/               the two project footprints (spring pin, radio module)
+  lib/               the two project footprints (spring pin, radio module) and a 3D model of the pin
   production/        ready-to-upload gerbers, BOM, placement files, schematic PDF
   scripts/           the design as code: one file in, schematic + board out
 firmware/
@@ -64,18 +82,52 @@ sim/
   run_all.py         simulate this board; results in sim/results/report.md
 ```
 
-## Make one
+## Get one
 
-The short version; [docs/BUILD.md](docs/BUILD.md) has every step.
+**Nobody sells built Limpet-16 boards.** This is a design you have made for
+you. There are three ways to end up holding one:
 
-1. Upload `hardware/production/limpet16-gerbers.zip` to a board house
-   (4 layers, 1.0 mm, ENIG finish).
-2. Have the top side assembled from `bom-jlcpcb.csv` and
-   `positions-top-jlcpcb.csv`, or solder it yourself.
-3. Solder the 18 spring pins by hand.
-4. Plug in USB-C and flash: `cd firmware/limpet16 && pio run -t upload`.
-5. Power it from a power bank and run
-   `python3 software/limpet16.py --seconds 30`.
+| Route | What you do | Skill needed |
+|---|---|---|
+| **Have it built** (easiest) | Upload [`hardware/production/limpet16-pcbway.zip`](hardware/production/limpet16-pcbway.zip) to a turnkey assembler such as PCBWay. It contains the gerbers, a parts list with manufacturer part numbers, placement files and a notes file. They make the board, buy the parts and solder them. You flash the firmware over USB-C. | None beyond placing an order |
+| **Have the top side built, fit the pins yourself** | Same package, ask for top side only. Solder the 18 spring pins with an ordinary iron (one large pad each). | Basic soldering |
+| **Build it all yourself** | Order bare boards from the gerbers and follow [docs/BUILD.md](docs/BUILD.md). | Fine-pitch surface-mount soldering, hot air |
+
+After that: plug in USB-C, run `pio run -t upload` in `firmware/limpet16`,
+power it from a power bank and run `python3 software/limpet16.py`.
+[docs/BUILD.md](docs/BUILD.md) has every step.
+
+If you would rather buy a finished unit, open an issue saying so. There is no
+promise that a batch will be made, but it is the only way interest gets
+counted.
+
+Because this revision is untested, order the minimum (five boards, two
+assembled) and expect the first one to need debugging.
+
+## What it costs
+
+Figures for **five bare boards with two assembled**, the smallest sensible
+order. The PCBWay figures are what its online calculator showed for this
+design's gerbers on 10 November 2026, before their engineers' review; the rest
+are estimates. Import VAT and duty are extra.
+
+| Item | Cost (USD) | Source |
+|---|---|---|
+| 5 bare boards: 4 layers, 1.0 mm, ENIG, 5-day build | 62 | PCBWay calculator |
+| Assembly labour, 2 boards, one or both sides | 88 | PCBWay calculator |
+| Courier shipping | about 29, offset by a first-order discount at the time | PCBWay calculator |
+| Components for 2 boards, excluding the spring pins | 80 - 110 | estimate from distributor prices |
+| 36 Mill-Max spring pins (18 per board) | about 145 | DigiKey list price, about 4 each |
+| **Two working boards, Mill-Max pins** | **about 375 - 405** | |
+| **Per board** | **about 190 - 200** | |
+
+Ways to spend less:
+
+- Generic 4 x 11 mm surface-mount pogo pins fit the same pads and cost a
+  small fraction of the Mill-Max part. Untested, like everything else here.
+- Lead-free HASL instead of ENIG roughly halves the bare-board price (32
+  instead of 62), at the cost of less flat pads.
+- The three spare bare boards cost only parts to populate later.
 
 ## Change it
 

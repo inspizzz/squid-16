@@ -14368,6 +14368,17 @@
 			(uuid "edd25c17-f325-422f-9a9b-5aa5ec5d1cca")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -14470,6 +14481,17 @@
 			(uuid "7dd152ac-afdd-470d-938e-1610879d8ae8")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -14572,6 +14594,17 @@
 			(uuid "3e9a8bad-8caf-4c3b-9cbb-00249908bc8f")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -14674,6 +14707,17 @@
 			(uuid "0caec77a-586e-430e-854b-5ef022b947a1")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -14776,6 +14820,17 @@
 			(uuid "1d882a50-200f-4f7a-9590-de505e033891")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -14878,6 +14933,17 @@
 			(uuid "525a6b96-4c85-4432-8050-52afe34d1300")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -14980,6 +15046,17 @@
 			(uuid "41f970c2-2d06-4760-9f82-9341ad876841")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15082,6 +15159,17 @@
 			(uuid "e0118daa-8b77-4efd-a1c1-c76967cd3822")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15184,6 +15272,17 @@
 			(uuid "3bea5b8d-da0c-4d03-86d9-b3ccd7c84f51")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15286,6 +15385,17 @@
 			(uuid "6a153f4e-aaf3-4e0a-9474-5684384d455f")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15388,6 +15498,17 @@
 			(uuid "9cbe6770-4aae-4084-b915-656b476fff9f")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15490,6 +15611,17 @@
 			(uuid "66a14597-a13b-43bc-86f5-b860efb8e743")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15592,6 +15724,17 @@
 			(uuid "37129a39-f851-4415-981e-d6daa10aaac2")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15694,6 +15837,17 @@
 			(uuid "02826fef-5746-46cf-b6e5-54894fc2fe30")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15796,6 +15950,17 @@
 			(uuid "5a2874c6-f0af-40a5-a96e-7ee30147094b")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -15898,6 +16063,17 @@
 			(uuid "3f905139-0ad0-435b-aec9-24573df271d8")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -16000,6 +16176,17 @@
 			(uuid "12730934-4f51-4319-974a-60bbde342665")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(footprint "limpet16:PogoPin_MillMax_0845_SMD"
 		(layer "B.Cu")
@@ -16102,6 +16289,17 @@
 			(uuid "d24e4925-c1de-434a-b8fd-f21ddf9260da")
 		)
 		(embedded_fonts no)
+		(model "${KIPRJMOD}/lib/limpet16.3dshapes/PogoPin_MillMax_0845.wrl"
+			(offset
+				(xyz 0 0 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 0)
+			)
+		)
 	)
 	(gr_line
 		(start 96.02005 119.6)
