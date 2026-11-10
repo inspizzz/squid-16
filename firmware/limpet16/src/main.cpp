@@ -53,6 +53,7 @@ static NimBLECharacteristic *dataChar = nullptr;
 static NimBLECharacteristic *cmdChar = nullptr;
 static volatile bool connected = false;
 static volatile bool adcOk = false;
+static uint16_t idA = 0, idB = 0;      // converter ID registers as read at start-up
 static TaskHandle_t adcTask = nullptr;
 static QueueHandle_t packetQueue = nullptr;
 static SemaphoreHandle_t spiLock = nullptr;
@@ -87,8 +88,8 @@ static bool startConverters(uint8_t gainCode) {
   digitalWrite(PIN_RESET, HIGH);
   delay(5);
   // A missing clock or a soldering fault on a converter shows up here.
-  uint16_t idA = adcA.read_reg(ads131::REG_ID);
-  uint16_t idB = adcB.read_reg(ads131::REG_ID);
+  idA = adcA.read_reg(ads131::REG_ID);
+  idB = adcB.read_reg(ads131::REG_ID);
   Serial.printf("ADC A id 0x%04X, ADC B id 0x%04X\n", idA, idB);
   if ((idA >> 8) != 0x28 || (idB >> 8) != 0x28) return false;
   bool ok = adcA.configure(gainCode, ads131::kOsr16256, DCBLOCK);
@@ -211,13 +212,22 @@ void setup() {
 void loop() {
   // LED: solid = streaming, slow blink = waiting for a
   // connection, fast double blink = converters not found.
-  static uint32_t lastLed = 0;
+  static uint32_t lastLed = 0, lastStatus = 0, sent = 0;
   Packet p;
   if (xQueueReceive(packetQueue, &p, pdMS_TO_TICKS(20)) == pdTRUE && connected) {
     dataChar->setValue(p.bytes, sizeof(p.bytes));
     dataChar->notify();
+    sent++;
   }
   uint32_t now = millis();
+  // The USB serial port only exists once the computer opens it, so the
+  // start-up messages are usually missed. Repeat the state every 5 s instead.
+  if (now - lastStatus >= 5000) {
+    lastStatus = now;
+    Serial.printf("limpet16: converters %s (id A 0x%04X, id B 0x%04X), %s, %lu packets sent\n",
+                  adcOk ? "ok" : "NOT FOUND", idA, idB,
+                  connected ? "connected" : "advertising", (unsigned long)sent);
+  }
   if (now - lastLed >= 50) {
     lastLed = now;
     bool on;

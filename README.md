@@ -87,7 +87,9 @@ hardware/scripts/build.sh
 
 to regenerate the schematic, place and route the board, run the checks and
 write new fabrication files (needs KiCad 9 and numpy; routing takes about
-eight minutes). You can also just open the KiCad files and edit them by hand, but
+eight minutes). The router is a simple one written for this board: after a
+change to the placement it may leave connections unrouted, and it says so. You
+can also just open the KiCad files and edit them by hand, but
 then stop using the generator, because it overwrites them.
 
 ## What has been verified

@@ -120,8 +120,9 @@ The module's built-in USB port does the flashing; a new module normally shows
 up as a serial port by itself. If no port appears, or the upload cannot
 connect, unplug USB, bridge the `BOOT` pad to the `GND` pad beside it with
 tweezers, plug USB in while they are bridged, then let go and upload again.
-After flashing this way, unplug and replug to start the firmware. The monitor
-should print both converter IDs (`0x28xx`) and `converters configured`.
+After flashing this way, unplug and replug to start the firmware. Every five
+seconds the monitor prints a status line; it should say `converters ok` with
+both IDs reading `0x28xx`.
 
 To run the PC-side firmware tests (no hardware needed): `firmware/test/run.sh`.
 

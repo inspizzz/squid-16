@@ -180,7 +180,10 @@ to build one.
    (1 % with a 100 kOhm contact, 9 % with 1 MOhm), which reduces rejection of
    signals common to all pins. Remove R28 to get rid of it.
 7. **Decoupling capacitors sit 3-4 mm from the converter supply pins**,
-   further than TI's layout advice.
+   further than TI's layout advice. The 5 V and 3.3 V supply tracks to the
+   radio module are 0.2 mm wide and tens of millimetres long, thin for a
+   module whose datasheet asks for a 0.5 A supply; the 10 uF capacitor beside
+   its supply pin is what carries the transmit bursts.
 8. **The module's centre ground pad has no vias under it.** They would come
    out through electrode pads. Espressif states that soldering this pad is
    optional; it is connected on the top layer only.
