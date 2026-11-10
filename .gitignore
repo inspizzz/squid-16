@@ -3,6 +3,7 @@ hardware/*-backups/
 hardware/fp-info-cache
 hardware/*.kicad_prl
 hardware/*.lck
+hardware/.previous.kicad_pcb
 # PlatformIO
 firmware/limpet16/.pio/
 # Python

@@ -86,10 +86,12 @@ hardware/scripts/build.sh
 ```
 
 to regenerate the schematic, place and route the board, run the checks and
-write new fabrication files (needs KiCad 9 and numpy; routing takes about
-eight minutes). The router is a simple one written for this board: after a
-change to the placement it may leave connections unrouted, and it says so. You
-can also just open the KiCad files and edit them by hand, but
+write new fabrication files (needs KiCad 9 and numpy; routing takes 6 to 12
+minutes). The router is a simple one written for this board and it does not
+succeed every time: of three full rebuilds of this exact design, one connected
+everything, and that is the board committed here. When it fails it says so and
+puts the previous board back; run it again or nudge a part. You can also just
+open the KiCad files and edit them by hand, but
 then stop using the generator, because it overwrites them.
 
 ## What has been verified
@@ -99,6 +101,7 @@ then stop using the generator, because it overwrites them.
 | Schematic electrical rules (KiCad ERC, all severities) | 0 violations |
 | Board design rules (KiCad DRC, all severities) | 0 violations, 0 unconnected |
 | Schematic and board agree (DRC parity, plus a pin-by-pin netlist comparison with `design.py`) | 0 differences |
+| Rebuilding the board from `design.py` gives a complete board every time | **no**: 1 of 3 attempts; the committed board is the complete one |
 | Firmware driver and packet code against a simulated ADS131M08 (`firmware/test/run.sh`) | pass |
 | Firmware builds for the ESP32-C3 (PlatformIO, Arduino core, NimBLE-Arduino) | builds, 753 kB flash |
 | Recorder packet decoder (`limpet16.py --selftest`) | pass |

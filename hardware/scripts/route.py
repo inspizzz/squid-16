@@ -26,6 +26,14 @@ import gen_pcb
 
 HW = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PCB = os.path.join(HW, "limpet16.kicad_pcb")
+# NOTE: the result is not the same on every rebuild. Each board that
+# gen_pcb.py writes routes a little differently (the cause has not been pinned
+# down; parts are now read in reference order below, which may or may not be
+# all of it), and not every attempt ends with everything connected: of three
+# full attempts on the committed design, one did. The committed .kicad_pcb is
+# that one. If this script reports unrouted connections, run gen_pcb.py and
+# this script again, or nudge a part in design.py.
+OUT_PCB = os.environ.get("LIMPET_ROUTE_OUT", PCB)   # where to save (default: in place)
 
 G = 0.0625                      # grid pitch, mm
 HALF = d.BOARD_DIAMETER / 2
@@ -175,7 +183,7 @@ class Router:
     # ------------------------------------------------------------ board import
     def _load(self):
         o = d.ORIGIN
-        for fp in self.b.GetFootprints():
+        for fp in sorted(self.b.GetFootprints(), key=lambda f: f.GetReference()):
             for pad in fp.Pads():
                 name = pad.GetNetname()
                 net = self.netid.setdefault(name, len(self.netid)) if name else BLOCK
@@ -589,8 +597,9 @@ def main():
     for layer, nm in ((pcbnew.F_Cu, "GND_TOP"), (pcbnew.B_Cu, "GND_BOTTOM")):
         gen_pcb.add_zone(board, layer, gnd, nm, HALF + 1)
     pcbnew.ZONE_FILLER(board).Fill(board.Zones())
-    pcbnew.SaveBoard(PCB, board)
-    gen_pcb.write_project()
+    pcbnew.SaveBoard(OUT_PCB, board)
+    if OUT_PCB == PCB:
+        gen_pcb.write_project()
     print(f"{nt} track segments, {nv} vias, {r.rips} rip-ups")
     gnd_left = [f for f in r.failed if f[0] == "GND"]
     if gnd_left:
